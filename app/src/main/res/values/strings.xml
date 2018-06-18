@@ -9,5 +9,13 @@
     <string name="Ubuntu">Ubuntu</string>
     <string name="Fedora">Fedora</string>
     <string name="mozilla">Mozilla/Firefox</string>
-    <!-- -->
+    <!-- Placeholders -->
+    <string name="dateview">7 января 2018 г., 6:41</string>
+    <string name="titleview">Проект Elementary OS разрабатывает текстовый редактор для разработчиков</string>
+    <string name="newsview">Разработчики Elementary OS с 2011 года развивают собственный текстовый редактор,
+        который входил в базовую поставку под именем Scratch. Из-за того, что многие пользователи путали
+        программу с визуальной средой программирования Scratch, редактор решено переименовать и отныне он
+        будет поставляться под именем Code, по аналогии с другими приложениями Elementary
+        (Files, Music, Videos, Calendar, Mail, Photos). Вне дистрибутива проект может упоминаться
+как "elementary Code".</string>
 </resources>

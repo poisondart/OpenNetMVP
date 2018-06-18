@@ -13,6 +13,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -23,12 +27,16 @@ public class NewsFragment extends Fragment implements TopicsBottomAdapter.OnTopi
     @BindView(R.id.visible_sheet)
     ConstraintLayout mVisibleLayout;
     @BindView(R.id.topics_recyclerview)
-    RecyclerView mRecyclerView;
+    RecyclerView mTopicsRecyclerView;
+    @BindView(R.id.news_recyclerview)
+    RecyclerView mNewsRecyclerView;
     @BindView(R.id.choosen_topic)
-    TextView mChoosenTopicTextView;
+    TextView mChosenTopicTextView;
 
-    private TopicsBottomAdapter mAdapter;
-    private LinearLayoutManager mLinearLayoutManager;
+    private TopicsBottomAdapter mTopicsBottomAdapter;
+    private NewsAdapter mNewsAdapter;
+    private LinearLayoutManager mTopicsLinearLayoutManager;
+    private LinearLayoutManager mNewsLinearLayoutManager;
     private BottomSheetBehavior mBottomSheetBehaviour;
 
     @Nullable
@@ -47,18 +55,45 @@ public class NewsFragment extends Fragment implements TopicsBottomAdapter.OnTopi
                 }
             }
         });
-        mLinearLayoutManager = new LinearLayoutManager(getContext());
-        mAdapter = new TopicsBottomAdapter();
-        mAdapter.setOnTopicItemClickedListener(this);
-        mRecyclerView.setLayoutManager(mLinearLayoutManager);
-        mRecyclerView.setAdapter(mAdapter);
+        mTopicsLinearLayoutManager = new LinearLayoutManager(getContext());
+        mNewsLinearLayoutManager = new LinearLayoutManager(getContext());
+        mTopicsBottomAdapter = new TopicsBottomAdapter();
+        mNewsAdapter = new NewsAdapter(initTestNews());
+        mTopicsBottomAdapter.setOnTopicItemClickedListener(this);
+        mTopicsRecyclerView.setLayoutManager(mTopicsLinearLayoutManager);
+        mNewsRecyclerView.setLayoutManager(mNewsLinearLayoutManager);
+        mTopicsRecyclerView.setAdapter(mTopicsBottomAdapter);
+        mNewsRecyclerView.setAdapter(mNewsAdapter);
+
+        mNewsRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0){
+                    mBottomSheetBehaviour.setState(BottomSheetBehavior.STATE_HIDDEN);
+                }
+                if (dy < 0){
+                    mBottomSheetBehaviour.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                }
+            }
+        });
+
         return v;
     }
 
     @Override
     public void TopicItemClicked(String title, String url) {
-        mChoosenTopicTextView.setText(title);
+        mChosenTopicTextView.setText(title);
         mBottomSheetBehaviour.setState(BottomSheetBehavior.STATE_COLLAPSED);
         //start loading news with using url parameter
+    }
+
+    private List<NewsItem> initTestNews(){
+        List<NewsItem> items = new ArrayList<>();
+        for (int i = 0; i < 7; i++){
+            items.add(new NewsItem(getString(R.string.dateview), getString(R.string.titleview),
+                    getString(R.string.newsview), "1234"));
+        }
+        return items;
     }
 }
