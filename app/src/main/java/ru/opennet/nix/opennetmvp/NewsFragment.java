@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.BottomSheetBehavior;
-import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,14 +13,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import java.util.ArrayList;
+import com.arellomobile.mvp.MvpAppCompatFragment;
+import com.arellomobile.mvp.presenter.InjectPresenter;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class NewsFragment extends Fragment implements TopicsBottomAdapter.OnTopicItemClicked{
+public class NewsFragment extends MvpAppCompatFragment implements TopicsBottomAdapter.OnTopicItemClicked, NewsView{
+
+    @InjectPresenter
+    NewsPresenter mNewsPresenter;
 
     @BindView(R.id.news_bottomsheet)
     LinearLayout mllBottomSheet;
@@ -32,6 +34,8 @@ public class NewsFragment extends Fragment implements TopicsBottomAdapter.OnTopi
     RecyclerView mNewsRecyclerView;
     @BindView(R.id.choosen_topic)
     TextView mChosenTopicTextView;
+    @BindView(R.id.swiperefresh)
+    SwipeRefreshLayout mSwipeRefreshLayout;
 
     private TopicsBottomAdapter mTopicsBottomAdapter;
     private NewsAdapter mNewsAdapter;
@@ -58,7 +62,7 @@ public class NewsFragment extends Fragment implements TopicsBottomAdapter.OnTopi
         mTopicsLinearLayoutManager = new LinearLayoutManager(getContext());
         mNewsLinearLayoutManager = new LinearLayoutManager(getContext());
         mTopicsBottomAdapter = new TopicsBottomAdapter();
-        mNewsAdapter = new NewsAdapter(initTestNews());
+        mNewsAdapter = new NewsAdapter();
         mTopicsBottomAdapter.setOnTopicItemClickedListener(this);
         mTopicsRecyclerView.setLayoutManager(mTopicsLinearLayoutManager);
         mNewsRecyclerView.setLayoutManager(mNewsLinearLayoutManager);
@@ -81,19 +85,27 @@ public class NewsFragment extends Fragment implements TopicsBottomAdapter.OnTopi
         return v;
     }
 
+
     @Override
     public void TopicItemClicked(String title, String url) {
         mChosenTopicTextView.setText(title);
         mBottomSheetBehaviour.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        //start loading news with using url parameter
+        mNewsPresenter.showLoading(true);
+        mNewsPresenter.setLink(url);
+        mNewsPresenter.loadNews();
     }
 
-    private List<NewsItem> initTestNews(){
-        List<NewsItem> items = new ArrayList<>();
-        for (int i = 0; i < 7; i++){
-            items.add(new NewsItem(getString(R.string.dateview), getString(R.string.titleview),
-                    getString(R.string.newsview), "1234"));
-        }
-        return items;
+    @Override
+    public void setUpdating(boolean isLoading) {
+        mSwipeRefreshLayout.setRefreshing(isLoading);
     }
+
+    @Override
+    public void showNews(List<NewsItem> items) {
+        mNewsAdapter.setNews(items);
+        mNewsAdapter.notifyDataSetChanged();
+        mNewsPresenter.showLoading(false);
+        mNewsRecyclerView.smoothScrollToPosition(0);
+    }
+
 }

@@ -2,6 +2,8 @@ package ru.opennet.nix.opennetmvp;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +17,12 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsHolder>{
 
     private List<NewsItem> mNewsItems;
 
-    public NewsAdapter(List<NewsItem> items) {
+    public NewsAdapter() {
         super();
+        mNewsItems = new ArrayList<>();
+    }
+
+    public void setNews(List<NewsItem> items){
         mNewsItems = items;
     }
 
@@ -49,12 +55,14 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsHolder>{
         public NewsHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            mDescView.setMovementMethod(ClickableMovementMethod.getInstance());
         }
         public void bindItem(NewsItem item){
             mNewsItem = item;
             mDateView.setText(mNewsItem.getDate());
             mTitleView.setText(mNewsItem.getTitle());
-            mDescView.setText(mNewsItem.getDesc());
+            Spanned spanned = Html.fromHtml(mNewsItem.getDesc().replaceAll("<img.+?>", ""));
+            mDescView.setText(spanned);
         }
     }
 }
