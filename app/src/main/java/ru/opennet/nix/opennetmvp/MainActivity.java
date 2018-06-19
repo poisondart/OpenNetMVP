@@ -6,6 +6,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ru.opennet.nix.opennetmvp.news.NewsFragment;
+import ru.opennet.nix.opennetmvp.utils.ViewPagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
     @BindView(R.id.tabs)

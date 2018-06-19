@@ -1,4 +1,4 @@
-package ru.opennet.nix.opennetmvp;
+package ru.opennet.nix.opennetmvp.utils;
 
 import android.text.Layout;
 import android.text.Selection;

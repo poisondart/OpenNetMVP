@@ -1,4 +1,4 @@
-package ru.opennet.nix.opennetmvp;
+package ru.opennet.nix.opennetmvp.news;
 
 public class NewsItem {
     private String mDate;

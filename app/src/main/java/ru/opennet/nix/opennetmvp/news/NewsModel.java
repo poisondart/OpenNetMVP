@@ -1,4 +1,4 @@
-package ru.opennet.nix.opennetmvp;
+package ru.opennet.nix.opennetmvp.news;
 
 import android.os.AsyncTask;
 import android.util.Log;

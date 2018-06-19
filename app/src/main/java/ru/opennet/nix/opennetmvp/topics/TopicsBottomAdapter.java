@@ -1,4 +1,4 @@
-package ru.opennet.nix.opennetmvp;
+package ru.opennet.nix.opennetmvp.topics;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ru.opennet.nix.opennetmvp.R;
+import ru.opennet.nix.opennetmvp.utils.Links;
 
 public class TopicsBottomAdapter extends RecyclerView.Adapter<TopicsBottomAdapter.TopicsViewHolder> {
 

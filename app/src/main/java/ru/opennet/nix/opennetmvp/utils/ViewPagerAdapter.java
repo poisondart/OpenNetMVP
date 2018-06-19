@@ -1,4 +1,4 @@
-package ru.opennet.nix.opennetmvp;
+package ru.opennet.nix.opennetmvp.utils;
 
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;

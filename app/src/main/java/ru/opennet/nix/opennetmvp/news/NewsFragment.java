@@ -1,4 +1,4 @@
-package ru.opennet.nix.opennetmvp;
+package ru.opennet.nix.opennetmvp.news;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,6 +18,8 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ru.opennet.nix.opennetmvp.R;
+import ru.opennet.nix.opennetmvp.topics.TopicsBottomAdapter;
 
 public class NewsFragment extends MvpAppCompatFragment implements TopicsBottomAdapter.OnTopicItemClicked, NewsView{
 

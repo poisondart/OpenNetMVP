@@ -1,4 +1,4 @@
-package ru.opennet.nix.opennetmvp;
+package ru.opennet.nix.opennetmvp.news;
 
 import com.arellomobile.mvp.MvpView;
 
