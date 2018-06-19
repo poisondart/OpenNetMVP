@@ -102,6 +102,7 @@ public class NewsFragment extends MvpAppCompatFragment implements TopicsBottomAd
         mNewsPresenter.showLoading(true);
         mNewsPresenter.setLink(url);
         mNewsPresenter.loadNews();
+        mNewsRecyclerView.smoothScrollToPosition(0);
     }
 
     @Override
@@ -114,7 +115,6 @@ public class NewsFragment extends MvpAppCompatFragment implements TopicsBottomAd
         mNewsAdapter.setNews(items);
         mNewsAdapter.notifyDataSetChanged();
         mNewsPresenter.showLoading(false);
-        mNewsRecyclerView.smoothScrollToPosition(0);
     }
 
 }
