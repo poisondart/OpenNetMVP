@@ -13,6 +13,13 @@ public class NewsPresenter extends MvpPresenter<NewsView> {
         mNewsModel = new NewsModel();
     }
 
+    @Override
+    protected void onFirstViewAttach() {
+        super.onFirstViewAttach();
+        showLoading(true);
+        loadNews();
+    }
+
     public void loadNews(){
         mNewsModel.loadNews(new NewsModel.LoadNewsCallback() {
             @Override

@@ -20,6 +20,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.opennet.nix.opennetmvp.R;
 import ru.opennet.nix.opennetmvp.topics.TopicsBottomAdapter;
+import ru.opennet.nix.opennetmvp.utils.Preferences;
 
 public class NewsFragment extends MvpAppCompatFragment implements TopicsBottomAdapter.OnTopicItemClicked, NewsView{
 
@@ -44,12 +45,16 @@ public class NewsFragment extends MvpAppCompatFragment implements TopicsBottomAd
     private LinearLayoutManager mTopicsLinearLayoutManager;
     private LinearLayoutManager mNewsLinearLayoutManager;
     private BottomSheetBehavior mBottomSheetBehaviour;
+    private Preferences mPreferences;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.news_fragment_layout, container, false);
         ButterKnife.bind(this, v);
+        mPreferences = new Preferences(getContext());
+        mChosenTopicTextView.setText(mPreferences.getTopicTitle(getContext()));
+        mNewsPresenter.setLink(mPreferences.getTopicLink());
         mBottomSheetBehaviour = BottomSheetBehavior.from(mllBottomSheet);
         mVisibleLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,6 +96,8 @@ public class NewsFragment extends MvpAppCompatFragment implements TopicsBottomAd
     @Override
     public void TopicItemClicked(String title, String url) {
         mChosenTopicTextView.setText(title);
+        mPreferences.setTopicTitle(title);
+        mPreferences.setTopicLink(url);
         mBottomSheetBehaviour.setState(BottomSheetBehavior.STATE_COLLAPSED);
         mNewsPresenter.showLoading(true);
         mNewsPresenter.setLink(url);
