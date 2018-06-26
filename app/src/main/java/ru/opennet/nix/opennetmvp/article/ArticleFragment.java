@@ -4,11 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -20,6 +23,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.opennet.nix.opennetmvp.R;
+import ru.opennet.nix.opennetmvp.utils.BottomBarBehaviour;
 import ru.opennet.nix.opennetmvp.utils.Links;
 
 public class ArticleFragment extends MvpAppCompatFragment implements ArticleView, ArticlePartAdapter.OnItemClickListener {
@@ -35,6 +39,9 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
 
     @BindView(R.id.article_toolbar)
     Toolbar mToolbar;
+
+    @BindView(R.id.bottom_bar)
+    ConstraintLayout mBotttomBar;
 
     private static final String ARG_ARTICLE_LINK = "article_link";
     private static final String ARG_ARTICLE_TITLE = "article_title";
@@ -74,6 +81,8 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.setAdapter(mArticlePartAdapter);
         mArticlePresenter.loadArticle();
+        CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) mBotttomBar.getLayoutParams();
+        layoutParams.setBehavior(new BottomBarBehaviour());
         return v;
     }
 
@@ -86,7 +95,19 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
             mDate = (String)getArguments().getSerializable(ARG_ARTICLE_DATE);
             mCat = (String)getArguments().getSerializable(ARG_ARTICLE_CATEGORY);
             mArticlePresenter.setLink(link);
+            setHasOptionsMenu(true);
         }
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                getActivity().finish();
+                return false;
+        }
+        return super.onOptionsItemSelected(item);
 
     }
 
