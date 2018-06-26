@@ -10,10 +10,14 @@ import ru.opennet.nix.opennetmvp.article.ArticleFragment;
 public class ArticleActivity extends AppCompatActivity {
 
     private static final String EXTRA_LINK = "ru.opennet.nix.opennetclient.link";
+    private static final String EXTRA_TITLE = "ru.opennet.nix.opennetclient.title";
+    private static final String EXTRA_DATE = "ru.opennet.nix.opennetclient.date";
 
-    public static Intent newIntent(Context context, String link){
+    public static Intent newIntent(Context context, String link, String title, String date){
         Intent intent = new Intent(context, ArticleActivity.class);
         intent.putExtra(EXTRA_LINK, link);
+        intent.putExtra(EXTRA_TITLE, title);
+        intent.putExtra(EXTRA_DATE, date);
         return intent;
     }
 
@@ -23,9 +27,11 @@ public class ArticleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_article);
 
         String link = getIntent().getStringExtra(EXTRA_LINK);
+        String title = getIntent().getStringExtra(EXTRA_TITLE);
+        String date = getIntent().getStringExtra(EXTRA_DATE);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        ArticleFragment fragment = ArticleFragment.newInstance(link);
+        ArticleFragment fragment = ArticleFragment.newInstance(link, title, date);
         fragmentManager.beginTransaction().add(R.id.article_fragment_host, fragment).commit();
     }
 }

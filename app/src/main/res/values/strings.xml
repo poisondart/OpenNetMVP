@@ -18,4 +18,7 @@
         будет поставляться под именем Code, по аналогии с другими приложениями Elementary
         (Files, Music, Videos, Calendar, Mail, Photos). Вне дистрибутива проект может упоминаться
 как "elementary Code".</string>
+    <!-- Error Messages -->
+    <string name="cannot_play_video">Невозможно воспроизвести видео</string>
+    <!-- -->
 </resources>

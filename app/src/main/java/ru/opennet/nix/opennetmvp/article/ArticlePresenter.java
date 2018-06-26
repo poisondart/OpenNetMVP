@@ -2,6 +2,7 @@ package ru.opennet.nix.opennetmvp.article;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
+import java.util.List;
 
 @InjectViewState
 public class ArticlePresenter extends MvpPresenter<ArticleView> {
@@ -15,8 +16,8 @@ public class ArticlePresenter extends MvpPresenter<ArticleView> {
     public void loadArticle(){
         mArticleModel.loadNews(new ArticleModel.LoadArticleCallback() {
             @Override
-            public void onLoad(Article article) {
-                getViewState().showArticle(article);
+            public void onLoad(List<ArticlePart> articleParts) {
+                getViewState().showArticle(articleParts);
             }
         });
     }
@@ -24,6 +25,6 @@ public class ArticlePresenter extends MvpPresenter<ArticleView> {
         getViewState().setUpdating(state);
     }
     public void setLink(String link){
-        mArticleModel.setNumLink(link);
+        mArticleModel.setData(link);
     }
 }

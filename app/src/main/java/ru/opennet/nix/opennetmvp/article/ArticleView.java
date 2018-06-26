@@ -2,7 +2,9 @@ package ru.opennet.nix.opennetmvp.article;
 
 import com.arellomobile.mvp.MvpView;
 
+import java.util.List;
+
 public interface ArticleView extends MvpView {
     void setUpdating(boolean isLoading);
-    void showArticle(Article article);
+    void showArticle(List<ArticlePart> articleParts);
 }

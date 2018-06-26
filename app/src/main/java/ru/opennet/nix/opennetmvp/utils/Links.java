@@ -9,7 +9,6 @@ public class Links {
     public final static String UBUNTU_NEWS_RSS_LINK = "http://www.opennet.ru/opennews/opennews_ubuntu_full.rss";
     public final static String MAIN_FEDORA_RSS_LINK = "http://www.opennet.ru/opennews/opennews_fedora_full.rss";
     public final static String MAIN_MOZILLA_FIREFOX_RSS_LINK = "http://www.opennet.ru/opennews/opennews_mozilla_full.rss";
-
-    public static final String ARTICLE_LINK_FIRST_PART = "http://www.opennet.ru/cgi-bin/opennews/navigator2.cgi?";
-    public static final String ARTICLE_LINK_TEMPLATE = "&template=12";
+    
+    public static final String YOUTUBE_API_KEY = "***********************";
 }

@@ -21,7 +21,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsHolder>{
     private OnNewsItemClicked mCallback;
 
     public interface OnNewsItemClicked{
-        void onNewsItemClicked(String url);
+        void onNewsItemClicked(String url, String title, String date);
     }
 
     public void setOnNewsItemClickedListener(OnNewsItemClicked callback){
@@ -81,7 +81,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsHolder>{
 
         @Override
         public void onClick(View view) {
-            mCallback.onNewsItemClicked(mNewsItem.getLink());
+            mCallback.onNewsItemClicked(mNewsItem.getLink(), mNewsItem.getTitle(), mNewsItem.getDate());
         }
     }
 }
