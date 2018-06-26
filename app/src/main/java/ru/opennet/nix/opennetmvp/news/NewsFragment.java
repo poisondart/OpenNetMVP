@@ -1,5 +1,6 @@
 package ru.opennet.nix.opennetmvp.news;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,11 +19,15 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ru.opennet.nix.opennetmvp.ArticleActivity;
+import ru.opennet.nix.opennetmvp.MainActivity;
 import ru.opennet.nix.opennetmvp.R;
 import ru.opennet.nix.opennetmvp.topics.TopicsBottomAdapter;
+import ru.opennet.nix.opennetmvp.utils.Links;
 import ru.opennet.nix.opennetmvp.utils.Preferences;
 
-public class NewsFragment extends MvpAppCompatFragment implements TopicsBottomAdapter.OnTopicItemClicked, NewsView{
+public class NewsFragment extends MvpAppCompatFragment implements TopicsBottomAdapter.OnTopicItemClicked, NewsView,
+    NewsAdapter.OnNewsItemClicked{
 
     @InjectPresenter
     NewsPresenter mNewsPresenter;
@@ -71,6 +76,7 @@ public class NewsFragment extends MvpAppCompatFragment implements TopicsBottomAd
         mTopicsBottomAdapter = new TopicsBottomAdapter();
         mNewsAdapter = new NewsAdapter();
         mTopicsBottomAdapter.setOnTopicItemClickedListener(this);
+        mNewsAdapter.setOnNewsItemClickedListener(this);
         mTopicsRecyclerView.setLayoutManager(mTopicsLinearLayoutManager);
         mNewsRecyclerView.setLayoutManager(mNewsLinearLayoutManager);
         mTopicsRecyclerView.setAdapter(mTopicsBottomAdapter);
@@ -103,6 +109,14 @@ public class NewsFragment extends MvpAppCompatFragment implements TopicsBottomAd
         mNewsPresenter.setLink(url);
         mNewsPresenter.loadNews();
         mNewsRecyclerView.smoothScrollToPosition(0);
+    }
+
+    @Override
+    public void onNewsItemClicked(String url) {
+        String numUrl = url.substring(41);
+        String fullLink = Links.ARTICLE_LINK_FIRST_PART.concat(numUrl).concat(Links.ARTICLE_LINK_TEMPLATE);
+        Intent intent = ArticleActivity.newIntent(getContext(), fullLink);
+        startActivity(intent);
     }
 
     @Override

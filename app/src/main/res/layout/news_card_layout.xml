@@ -8,12 +8,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     card_view:cardCornerRadius="4dp"
     android:layout_margin="6dp"
-    android:elevation="8dp"
-    android:background="@color/colorPrimary">
+    android:elevation="8dp">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@drawable/news_item_state">
 
         <TextView
             android:id="@+id/dateview"

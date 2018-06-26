@@ -18,6 +18,15 @@ import ru.opennet.nix.opennetmvp.utils.ClickableMovementMethod;
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsHolder>{
 
     private List<NewsItem> mNewsItems;
+    private OnNewsItemClicked mCallback;
+
+    public interface OnNewsItemClicked{
+        void onNewsItemClicked(String url);
+    }
+
+    public void setOnNewsItemClickedListener(OnNewsItemClicked callback){
+        mCallback = callback;
+    }
 
     public NewsAdapter() {
         super();
@@ -45,7 +54,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsHolder>{
         return mNewsItems.size();
     }
 
-    class NewsHolder extends RecyclerView.ViewHolder{
+    class NewsHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         @BindView(R.id.dateview)
         TextView mDateView;
         @BindView(R.id.titleview)
@@ -58,6 +67,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsHolder>{
             super(itemView);
             ButterKnife.bind(this, itemView);
             mDescView.setMovementMethod(ClickableMovementMethod.getInstance());
+            itemView.setOnClickListener(this);
+            mDescView.setClickable(false);
+            mDescView.setLongClickable(false);
         }
         public void bindItem(NewsItem item){
             mNewsItem = item;
@@ -65,6 +77,11 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsHolder>{
             mTitleView.setText(mNewsItem.getTitle());
             Spanned spanned = Html.fromHtml(mNewsItem.getDesc().replaceAll("<img.+?>", ""));
             mDescView.setText(spanned);
+        }
+
+        @Override
+        public void onClick(View view) {
+            mCallback.onNewsItemClicked(mNewsItem.getLink());
         }
     }
 }
