@@ -1,5 +1,6 @@
 package ru.opennet.nix.opennetmvp.article;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,12 +14,15 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.google.android.youtube.player.YouTubeStandalonePlayer;
+
 import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.opennet.nix.opennetmvp.R;
+import ru.opennet.nix.opennetmvp.utils.Links;
 
-public class ArticleFragment extends MvpAppCompatFragment implements ArticleView {
+public class ArticleFragment extends MvpAppCompatFragment implements ArticleView, ArticlePartAdapter.OnItemClickListener {
 
     @InjectPresenter
     ArticlePresenter mArticlePresenter;
@@ -35,16 +39,18 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
     private static final String ARG_ARTICLE_LINK = "article_link";
     private static final String ARG_ARTICLE_TITLE = "article_title";
     private static final String ARG_ARTICLE_DATE = "article_date";
+    private static final String ARG_ARTICLE_CATEGORY = "article_category";
 
     private ArticlePartAdapter mArticlePartAdapter;
     private LinearLayoutManager mLinearLayoutManager;
-    private String mTitle, mDate;
+    private String mTitle, mDate, mCat;
 
-    public static ArticleFragment newInstance(String link, String title, String date){
+    public static ArticleFragment newInstance(String link, String title, String date, String cat){
         Bundle bundle = new Bundle();
         bundle.putSerializable(ARG_ARTICLE_LINK, link);
         bundle.putSerializable(ARG_ARTICLE_TITLE, title);
         bundle.putSerializable(ARG_ARTICLE_DATE, date);
+        bundle.putSerializable(ARG_ARTICLE_CATEGORY, cat);
         ArticleFragment articleFragment = new ArticleFragment();
         articleFragment.setArguments(bundle);
         return articleFragment;
@@ -59,7 +65,9 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
         actionBar.setSupportActionBar(mToolbar);
         actionBar.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         actionBar.getSupportActionBar().setDisplayShowHomeEnabled(true);
+        actionBar.getSupportActionBar().setTitle(mCat);
         mArticlePartAdapter = new ArticlePartAdapter();
+        mArticlePartAdapter.setOnItemClickListener(this);
         mArticlePartAdapter.setTitleAndDate(mTitle, mDate);
         mLinearLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setNestedScrollingEnabled(false);
@@ -76,6 +84,7 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
             String link = (String)getArguments().getSerializable(ARG_ARTICLE_LINK);
             mTitle = (String)getArguments().getSerializable(ARG_ARTICLE_TITLE);
             mDate = (String)getArguments().getSerializable(ARG_ARTICLE_DATE);
+            mCat = (String)getArguments().getSerializable(ARG_ARTICLE_CATEGORY);
             mArticlePresenter.setLink(link);
         }
 
@@ -96,5 +105,12 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
         mArticlePartAdapter.setParts(articleParts);
         mArticlePartAdapter.notifyDataSetChanged();
         mArticlePresenter.showLoading(false);
+    }
+
+    @Override
+    public void onVideoItemClicked(String link) {
+        Intent intent = YouTubeStandalonePlayer.createVideoIntent(getActivity(),
+                Links.YOUTUBE_API_KEY, link);
+        startActivity(intent);
     }
 }

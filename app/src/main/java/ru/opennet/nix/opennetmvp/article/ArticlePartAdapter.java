@@ -1,8 +1,6 @@
 package ru.opennet.nix.opennetmvp.article;
 
-import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.Spanned;
@@ -13,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.google.android.youtube.player.YouTubeInitializationResult;
-import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.google.android.youtube.player.YouTubeThumbnailLoader;
 import com.google.android.youtube.player.YouTubeThumbnailView;
 import java.util.ArrayList;
@@ -28,14 +25,23 @@ public class ArticlePartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private static final int TYPE_ITEM_TEXT = 1;
     private static final int TYPE_ITEM_IMAGE = 2;
     private static final int TYPE_ITEM_VIDEO = 3;
-    //private int mFirstExtraLinkPosition = -1;
     private List<ArticlePart> mArticleParts;
     private String mArticleTitle, mArticleDate;
+    private OnItemClickListener mCallback;
 
     public ArticlePartAdapter() {
         super();
         mArticleParts = new ArrayList<>();
     }
+
+    public interface OnItemClickListener{
+        void onVideoItemClicked(String link);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener callback){
+        mCallback = callback;
+    }
+
     public void setParts(List<ArticlePart> parts){
         mArticleParts = parts;
     }
@@ -156,9 +162,7 @@ public class ArticlePartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         @Override
         public void onClick(View view) {
             if(isInit){
-                Intent intent = YouTubeStandalonePlayer.createVideoIntent((AppCompatActivity)view.getContext(),
-                        Links.YOUTUBE_API_KEY, mPart.getContentLink());
-                view.getContext().startActivity(intent);
+                mCallback.onVideoItemClicked(mPart.getContentLink());
             }
         }
 

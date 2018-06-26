@@ -111,9 +111,7 @@ public class NewsFragment extends MvpAppCompatFragment implements TopicsBottomAd
 
     @Override
     public void onNewsItemClicked(String url, String title, String date) {
-        /*String numUrl = url.substring(41);
-        String fullLink = Links.ARTICLE_LINK_FIRST_PART.concat(numUrl).concat(Links.ARTICLE_LINK_TEMPLATE);*/
-        Intent intent = ArticleActivity.newIntent(getContext(), url, title, date);
+        Intent intent = ArticleActivity.newIntent(getContext(), url, title, date, mPreferences.getTopicTitle(getContext()));
         startActivity(intent);
     }
 
