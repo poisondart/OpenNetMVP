@@ -22,7 +22,8 @@
             android:name=".ArticleActivity"
             android:theme="@style/ArticleTheme">
         </activity>
-        <activity android:name=".CommentsActivity">
+        <activity android:name=".CommentsActivity"
+            android:theme="@style/ArticleTheme">
         </activity>
     </application>
 

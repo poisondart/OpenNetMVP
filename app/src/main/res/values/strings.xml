@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">OpenNetMVP</string>
+    <string name="comments_title">Комментарии</string>
     <string name="share_link_hint">Поделиться статьёй</string>
     <string name="load_com_link_hint">Загрузка комментариев&#8230;</string>
     <!-- NavigationView Menu Items-->
@@ -12,7 +13,7 @@
     <string name="Fedora">Fedora</string>
     <string name="mozilla">Mozilla/Firefox</string>
     <!-- Placeholders -->
-    <string name="dateview">7 января 2018 г., 6:41</string>
+    <string name="dateview">28.06.2018 16:41</string>
     <string name="titleview">Проект Elementary OS разрабатывает текстовый редактор для разработчиков</string>
     <string name="newsview">Разработчики Elementary OS с 2011 года развивают собственный текстовый редактор,
         который входил в базовую поставку под именем Scratch. Из-за того, что многие пользователи путали
@@ -20,6 +21,8 @@
         будет поставляться под именем Code, по аналогии с другими приложениями Elementary
         (Files, Music, Videos, Calendar, Mail, Photos). Вне дистрибутива проект может упоминаться
 как "elementary Code".</string>
+    <string name="comment_author">Аноним</string>
+    <string name="comment_desc">Она там поди уже сто лет в обед.</string>
     <!-- Error Messages -->
     <string name="cannot_play_video">Невозможно воспроизвести видео</string>
     <!-- -->

@@ -124,7 +124,7 @@ public class NewsFragment extends MvpAppCompatFragment implements TopicsBottomAd
     public void showNews(List<NewsItem> items) {
         mNewsAdapter.setNews(items);
         mNewsAdapter.notifyDataSetChanged();
-        mNewsPresenter.showLoading(false);
+        setUpdating(false);
     }
 
 }

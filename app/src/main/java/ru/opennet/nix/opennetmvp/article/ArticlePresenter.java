@@ -13,13 +13,19 @@ public class ArticlePresenter extends MvpPresenter<ArticleView> {
         mArticleModel = new ArticleModel();
     }
 
-    public void loadArticle(){
+    public void loadArticle() {
         mArticleModel.loadNews(new ArticleModel.LoadArticleCallback() {
             @Override
             public void onLoad(List<ArticlePart> articleParts) {
                 getViewState().showArticle(articleParts);
             }
         });
+    }
+
+    @Override
+    protected void onFirstViewAttach() {
+        super.onFirstViewAttach();
+        loadArticle();
     }
 
     public void loadCommentsLink(){

@@ -100,7 +100,6 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
         mRecyclerView.setNestedScrollingEnabled(false);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.setAdapter(mArticlePartAdapter);
-        mArticlePresenter.loadArticle();
         CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) mBottomBar.getLayoutParams();
         layoutParams.setBehavior(new BottomBarBehaviour());
         mShareButton.setOnClickListener(this);
@@ -168,8 +167,10 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
     public void setUpdating(boolean isLoading) {
         if(isLoading){
             mProgressBar.setVisibility(View.VISIBLE);
+            mBottomBar.setVisibility(View.INVISIBLE);
         }else{
             mProgressBar.setVisibility(View.GONE);
+            mBottomBar.setVisibility(View.VISIBLE);
         }
     }
 
