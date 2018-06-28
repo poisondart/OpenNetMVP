@@ -14,19 +14,22 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
-
 import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ru.opennet.nix.opennetmvp.CommentsActivity;
 import ru.opennet.nix.opennetmvp.R;
 import ru.opennet.nix.opennetmvp.utils.BottomBarBehaviour;
 import ru.opennet.nix.opennetmvp.utils.Links;
 
-public class ArticleFragment extends MvpAppCompatFragment implements ArticleView, ArticlePartAdapter.OnItemClickListener {
+public class ArticleFragment extends MvpAppCompatFragment implements ArticleView, ArticlePartAdapter.OnItemClickListener,
+        View.OnClickListener{
 
     @InjectPresenter
     ArticlePresenter mArticlePresenter;
@@ -41,7 +44,22 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
     Toolbar mToolbar;
 
     @BindView(R.id.bottom_bar)
-    ConstraintLayout mBotttomBar;
+    ConstraintLayout mBottomBar;
+
+    @BindView(R.id.share_button)
+    ImageButton mShareButton;
+
+    @BindView(R.id.save_button)
+    ImageButton mSaveButton;
+
+    @BindView(R.id.comments_button)
+    ImageButton mCommentsButton;
+
+    @BindView(R.id.com_prog)
+    ProgressBar mComProgressBar;
+
+    @BindView(R.id.loading_com_textview)
+    TextView mLoadingComTextview;
 
     private static final String ARG_ARTICLE_LINK = "article_link";
     private static final String ARG_ARTICLE_TITLE = "article_title";
@@ -50,7 +68,9 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
 
     private ArticlePartAdapter mArticlePartAdapter;
     private LinearLayoutManager mLinearLayoutManager;
-    private String mTitle, mDate, mCat;
+    private String mTitle, mDate, mCat, mLink;
+
+    private boolean mAdded = false;
 
     public static ArticleFragment newInstance(String link, String title, String date, String cat){
         Bundle bundle = new Bundle();
@@ -81,8 +101,16 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.setAdapter(mArticlePartAdapter);
         mArticlePresenter.loadArticle();
-        CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) mBotttomBar.getLayoutParams();
+        CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) mBottomBar.getLayoutParams();
         layoutParams.setBehavior(new BottomBarBehaviour());
+        mShareButton.setOnClickListener(this);
+        mSaveButton.setOnClickListener(this);
+        mCommentsButton.setOnClickListener(this);
+        if (mAdded){
+            mSaveButton.setImageResource(R.drawable.ic_delete_button);
+        }else{
+            mSaveButton.setImageResource(R.drawable.ic_fav_button);
+        }
         return v;
     }
 
@@ -90,14 +118,39 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(getArguments() != null){
-            String link = (String)getArguments().getSerializable(ARG_ARTICLE_LINK);
+            mLink = (String)getArguments().getSerializable(ARG_ARTICLE_LINK);
             mTitle = (String)getArguments().getSerializable(ARG_ARTICLE_TITLE);
             mDate = (String)getArguments().getSerializable(ARG_ARTICLE_DATE);
             mCat = (String)getArguments().getSerializable(ARG_ARTICLE_CATEGORY);
-            mArticlePresenter.setLink(link);
+            mArticlePresenter.setLink(mLink);
             setHasOptionsMenu(true);
         }
 
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.share_button:
+                Intent i = new Intent(Intent.ACTION_SEND);
+                i.setType("text/plain");
+                i.putExtra(Intent.EXTRA_TEXT, mLink);
+                i.putExtra(Intent.EXTRA_SUBJECT, mTitle);
+                startActivity(Intent.createChooser(i, getString(R.string.share_link_hint)));
+                break;
+            case R.id.save_button:
+                if (mAdded){
+                    mSaveButton.setImageResource(R.drawable.ic_fav_button);
+                }else{
+                    mSaveButton.setImageResource(R.drawable.ic_delete_button);
+                }
+                mAdded = !mAdded;
+                break;
+            case R.id.comments_button:
+                showCommentsLinkLoading(true);
+                mArticlePresenter.loadCommentsLink();
+                break;
+        }
     }
 
     @Override
@@ -122,10 +175,38 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
 
     @Override
     public void showArticle(List<ArticlePart> articleParts) {
-        mArticlePresenter.showLoading(true);
+        //mArticlePresenter.showLoading(true);
+        setUpdating(true);
         mArticlePartAdapter.setParts(articleParts);
         mArticlePartAdapter.notifyDataSetChanged();
-        mArticlePresenter.showLoading(false);
+        //mArticlePresenter.showLoading(false);
+        setUpdating(false);
+    }
+
+    @Override
+    public void startCommentsActivity(String link) {
+        showCommentsLinkLoading(false);
+        Intent intent = CommentsActivity.newInstance(getContext(), link);
+        startActivity(intent);
+    }
+
+    @Override
+    public void showCommentsLinkLoading(boolean isLoading) {
+        if(isLoading){
+            mLoadingComTextview.setVisibility(View.VISIBLE);
+            mComProgressBar.setVisibility(View.VISIBLE);
+
+            mSaveButton.setVisibility(View.INVISIBLE);
+            mShareButton.setVisibility(View.INVISIBLE);
+            mCommentsButton.setVisibility(View.INVISIBLE);
+        }else{
+            mLoadingComTextview.setVisibility(View.INVISIBLE);
+            mComProgressBar.setVisibility(View.INVISIBLE);
+
+            mSaveButton.setVisibility(View.VISIBLE);
+            mShareButton.setVisibility(View.VISIBLE);
+            mCommentsButton.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

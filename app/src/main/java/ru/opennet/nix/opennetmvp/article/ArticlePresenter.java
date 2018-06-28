@@ -21,9 +21,24 @@ public class ArticlePresenter extends MvpPresenter<ArticleView> {
             }
         });
     }
-    public void showLoading(boolean state){
-        getViewState().setUpdating(state);
+
+    public void loadCommentsLink(){
+        mArticleModel.loadCommentsLink(new ArticleModel.LoadCommentsLinkCallback() {
+            @Override
+            public void onLoad(String commentsLink) {
+                getViewState().startCommentsActivity(commentsLink);
+            }
+        });
     }
+
+    /*public void showLoading(boolean state){
+        getViewState().setUpdating(state);
+    }*/
+
+    /*public void showCommentsLinkLoading(boolean state){
+        getViewState().showCommentsLinkLoading(state);
+    }*/
+
     public void setLink(String link){
         mArticleModel.setData(link);
     }

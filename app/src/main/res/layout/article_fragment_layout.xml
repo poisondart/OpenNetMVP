@@ -15,10 +15,12 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:layout_scrollFlags="scroll|enterAlways"/>
 </android.support.design.widget.AppBarLayout>
+
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -38,6 +40,7 @@
                 android:layout_below="@+id/progressbar_article"/>
         </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>
+
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -84,6 +87,30 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
+        <ProgressBar
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/com_prog"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp"
+            android:visibility="invisible"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/loading_com_textview"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/com_prog"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="@string/load_com_link_hint"
+            android:textSize="18sp"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
+            android:visibility="invisible"/>
 
     </android.support.constraint.ConstraintLayout>
+
 </android.support.design.widget.CoordinatorLayout>

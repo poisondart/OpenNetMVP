@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.opennet.nix.opennetmvp.utils.Links;
+
 public class ArticleModel {
 
     private String mLink;
@@ -21,9 +23,53 @@ public class ArticleModel {
         void onLoad(List<ArticlePart> articleParts);
     }
 
+    interface LoadCommentsLinkCallback{
+        void onLoad(String commentsLink);
+    }
+
     public void loadNews(LoadArticleCallback callback){
         LoadArticleTask loadArticleTask = new LoadArticleTask(mLink, callback);
         loadArticleTask.execute();
+    }
+
+    public void loadCommentsLink(LoadCommentsLinkCallback callback){
+        LoadCommentsTask loadCommentsTask = new LoadCommentsTask(mLink, callback);
+        loadCommentsTask.execute();
+    }
+
+    private static class LoadCommentsTask extends AsyncTask<Void, Void, String>{
+        private String mLink;
+        private final LoadCommentsLinkCallback mCallback;
+
+        public LoadCommentsTask(String link, LoadCommentsLinkCallback callback) {
+            super();
+            mLink = link;
+            mCallback = callback;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if(mCallback != null){
+                mCallback.onLoad(s);
+            }
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            String comlink = "";
+            try{
+                comlink = parseHTMLArticleCommentsLink(mLink);
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+            return comlink;
+        }
     }
 
     private static class LoadArticleTask extends AsyncTask<Void, Void, List<ArticlePart>>{
@@ -59,6 +105,16 @@ public class ArticleModel {
             }
             return articleParts;
         }
+    }
+
+    private static String parseHTMLArticleCommentsLink(String url) throws IOException{
+        Document mDocument;
+        Element mElement;
+        String comlink = "";
+        mDocument = Jsoup.connect(url).get();
+        mElement = mDocument.select("input[name = om]").first();
+        comlink = mElement.attr("value");
+        return Links.COMMENTS_LINK.concat(comlink);
     }
 
     private static List<ArticlePart> parseHTMLArticle(String url) throws IOException{
