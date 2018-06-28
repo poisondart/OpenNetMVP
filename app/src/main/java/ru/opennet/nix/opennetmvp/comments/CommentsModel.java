@@ -13,6 +13,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -52,6 +53,7 @@ public class CommentsModel {
         protected void onPostExecute(List<Comment> comments) {
             super.onPostExecute(comments);
             if(mCallback != null){
+                //Collections.sort(comments, Comment.COMPARE_BY_POSITION);
                 mCallback.onLoad(comments);
             }
         }
@@ -71,6 +73,7 @@ public class CommentsModel {
             }catch (XmlPullParserException x){
                 x.printStackTrace();
             }
+
             return items;
         }
     }
@@ -79,7 +82,7 @@ public class CommentsModel {
         String author = null;
         String pubDate = null;
         String descr = null;
-        int pos = 1;
+        int pos = -1;
         boolean isItem = false;
         boolean hook = false;
 
@@ -146,11 +149,11 @@ public class CommentsModel {
                         continue;
                     }
                 }else if(name.equalsIgnoreCase("thread")){
-                    char c = result.charAt(2);
+                    char c = result.charAt(result.length() - 1);
                     pos = Character.getNumericValue(c);
                 }
 
-                if (author != null && pubDate != null && descr != null) {
+                if (author != null && pubDate != null && descr != null && pos != -1) {
                     if (isItem) {
                         Comment item = new Comment(author, pos, pubDate, descr);
                         items.add(item);
@@ -159,7 +162,7 @@ public class CommentsModel {
                     author = null;
                     pubDate = null;
                     descr = null;
-                    pos = 1;
+                    pos = -1;
                     isItem = false;
                 }
             }

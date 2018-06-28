@@ -1,5 +1,7 @@
 package ru.opennet.nix.opennetmvp.comments;
 
+import java.util.Comparator;
+
 public class Comment {
     private String mAuthor;
     private int mPosition;
@@ -47,4 +49,11 @@ public class Comment {
     public void setContent(String content) {
         mContent = content;
     }
+
+    public static final Comparator<Comment> COMPARE_BY_POSITION = new Comparator<Comment>() {
+        @Override
+        public int compare(Comment comment, Comment t1) {
+            return comment.getPosition() - t1.getPosition();
+        }
+    };
 }
