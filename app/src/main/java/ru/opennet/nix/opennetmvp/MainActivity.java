@@ -6,6 +6,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ru.opennet.nix.opennetmvp.favorites.FavoritesFragment;
 import ru.opennet.nix.opennetmvp.news.NewsFragment;
 import ru.opennet.nix.opennetmvp.utils.ViewPagerAdapter;
 
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
     private void setupViewPager(){
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         viewPagerAdapter.addFragment(new NewsFragment());
-        viewPagerAdapter.addFragment(new TestFragment());
+        viewPagerAdapter.addFragment(new FavoritesFragment());
         viewPagerAdapter.addFragment(new PreferenceFragment());
         mViewPager.setAdapter(viewPagerAdapter);
     }
