@@ -23,6 +23,10 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.Favo
         mArticles = new ArrayList<>();
     }
 
+    public String getFavLink(int pos){
+        return mArticles.get(pos).getLink();
+    }
+
     public interface OnFavsItemClicked{
         void onFavsItemClicked(String url, String title, String date);
     }

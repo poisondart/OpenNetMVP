@@ -2,10 +2,7 @@ package ru.opennet.nix.opennetmvp.favorites;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
-
-import java.util.ArrayList;
 import java.util.List;
-
 import io.realm.Realm;
 import ru.opennet.nix.opennetmvp.article.Article;
 
@@ -36,6 +33,10 @@ public class FavoritesPresenter extends MvpPresenter<FavoritesView> {
         List<Article> articleList = mFavoritesModel.getFavs(mRealm);
         getViewState().showFavorites(articleList);
         getViewState().showHint(articleList.size() > 0);
+    }
+
+    public void deleteArticleFromRealm(String link){
+        mFavoritesModel.deleteArticle(mRealm, link);
     }
 
     @Override

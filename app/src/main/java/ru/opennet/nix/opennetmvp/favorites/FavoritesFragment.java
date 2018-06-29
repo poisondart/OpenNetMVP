@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +44,22 @@ public class FavoritesFragment extends MvpAppCompatFragment implements Favorites
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.setOnFavsItemClickedListener(this);
+
+        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                int pos = viewHolder.getAdapterPosition();
+                mFavoritesPresenter.deleteArticleFromRealm(mAdapter.getFavLink(pos));
+                mAdapter.notifyItemRemoved(pos);
+            }
+        };
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(mRecyclerView);
         return v;
     }
 
