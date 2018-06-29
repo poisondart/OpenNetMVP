@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -132,9 +133,7 @@ public class ArticlePartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         private TextPartViewHolder(View view){
             super(view);
             textView = view.findViewById(R.id.text_part);
-            textView.setMovementMethod(ClickableMovementMethod.getInstance());
-            textView.setClickable(false);
-            textView.setLongClickable(false);
+            textView.setMovementMethod(LinkMovementMethod.getInstance());
         }
     }
     private class ImagePartViewHolder extends RecyclerView.ViewHolder{

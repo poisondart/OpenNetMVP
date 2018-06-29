@@ -73,7 +73,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
             mDateView.setText(mComment.getDate());
             Spanned spanned = Html.fromHtml(mComment.getContent());
             mDescView.setText(spanned);
-            /*int pos = (mComment.getPosition() - 1) * 10 + 6;
+            /*int pos = (mComment.getPosition() - 1) * 16 + 6;
             FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) mConstraintLayout.getLayoutParams();
             params.setMargins(pos,0,0,0);
             mConstraintLayout.setLayoutParams(params);

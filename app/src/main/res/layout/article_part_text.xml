@@ -15,5 +15,6 @@
         android:layout_marginBottom="4dp"
         android:textSize="18sp"
         android:lineSpacingExtra="4dp"
+        android:textIsSelectable="true"
         android:textColor="@color/colorBlack"/>
 </LinearLayout>
