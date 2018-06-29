@@ -1,6 +1,10 @@
 package ru.opennet.nix.opennetmvp.article;
 
-public class ArticlePart {
+import io.realm.RealmObject;
+import io.realm.annotations.Required;
+
+public class ArticlePart extends RealmObject{
+    @Required
     private String mArticleLink;
     private String mText;
     private String mContentLink;
@@ -9,6 +13,8 @@ public class ArticlePart {
     public static final int SIMPLE_TEXT = 0;
     public static final int IMAGE = 1;
     public static final int VIDEO_ITEM = 2;
+
+    public static String ARTICLE_LINK = "mArticleLink";
 
     public ArticlePart() {
     }

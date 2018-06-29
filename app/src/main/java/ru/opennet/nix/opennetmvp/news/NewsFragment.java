@@ -16,12 +16,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import java.util.ArrayList;
 import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.opennet.nix.opennetmvp.ArticleActivity;
 import ru.opennet.nix.opennetmvp.R;
+import ru.opennet.nix.opennetmvp.topics.TopicItem;
 import ru.opennet.nix.opennetmvp.topics.TopicsBottomAdapter;
+import ru.opennet.nix.opennetmvp.utils.Links;
 import ru.opennet.nix.opennetmvp.utils.Preferences;
 
 public class NewsFragment extends MvpAppCompatFragment implements TopicsBottomAdapter.OnTopicItemClicked, NewsView,
@@ -72,6 +75,7 @@ public class NewsFragment extends MvpAppCompatFragment implements TopicsBottomAd
         mTopicsLinearLayoutManager = new LinearLayoutManager(getContext());
         mNewsLinearLayoutManager = new LinearLayoutManager(getContext());
         mTopicsBottomAdapter = new TopicsBottomAdapter();
+        mTopicsBottomAdapter.setTopics(initTopics());
         mNewsAdapter = new NewsAdapter();
         mTopicsBottomAdapter.setOnTopicItemClickedListener(this);
         mNewsAdapter.setOnNewsItemClickedListener(this);
@@ -127,4 +131,16 @@ public class NewsFragment extends MvpAppCompatFragment implements TopicsBottomAd
         setUpdating(false);
     }
 
+    private List<TopicItem> initTopics(){
+        List<TopicItem> topicItems = new ArrayList<>();
+        topicItems.add(new TopicItem(getString(R.string.main_news), Links.MAIN_NEWS_RSS_LINK));
+        topicItems.add(new TopicItem(getString(R.string.updates), Links.MAIN_NEW_SOFT_UPDATE_RSS_LINK));
+        topicItems.add(new TopicItem(getString(R.string.safety), Links.MAIN_SECURITY_PROB_RSS_LINK));
+        topicItems.add(new TopicItem(getString(R.string.Ubuntu), Links.UBUNTU_NEWS_RSS_LINK));
+        topicItems.add(new TopicItem(getString(R.string.linux), Links.MAIN_LINUX_RSS_LINK));
+        topicItems.add(new TopicItem(getString(R.string.Fedora), Links.MAIN_FEDORA_RSS_LINK));
+        topicItems.add(new TopicItem(getString(R.string.BSD), Links.MAIN_BSD_RSS_LINK));
+        topicItems.add(new TopicItem(getString(R.string.mozilla), Links.MAIN_MOZILLA_FIREFOX_RSS_LINK));
+        return topicItems;
+    }
 }

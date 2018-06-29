@@ -8,15 +8,26 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
+import javax.annotation.ParametersAreNonnullByDefault;
+import io.realm.Realm;
 import ru.opennet.nix.opennetmvp.utils.Links;
 
 public class ArticleModel {
 
-    private String mLink;
+    private Article mArticle;
+    private List<ArticlePart> mArticleParts = new ArrayList<>();
 
-    public void setData(String link){
-        mLink = link;
+
+    public void setArticleParts(List<ArticlePart> articleParts){
+        mArticleParts = articleParts;
+    }
+
+    public List<ArticlePart> getArticleParts(){
+        return mArticleParts;
+    }
+
+    public void setArticle(Article article){
+        mArticle = article;
     }
 
     interface LoadArticleCallback{
@@ -28,12 +39,12 @@ public class ArticleModel {
     }
 
     public void loadNews(LoadArticleCallback callback){
-        LoadArticleTask loadArticleTask = new LoadArticleTask(mLink, callback);
+        LoadArticleTask loadArticleTask = new LoadArticleTask(mArticle.getLink(), callback);
         loadArticleTask.execute();
     }
 
     public void loadCommentsLink(LoadCommentsLinkCallback callback){
-        LoadCommentsTask loadCommentsTask = new LoadCommentsTask(mLink, callback);
+        LoadCommentsTask loadCommentsTask = new LoadCommentsTask(mArticle.getLink(), callback);
         loadCommentsTask.execute();
     }
 
@@ -139,5 +150,42 @@ public class ArticleModel {
                 }
             }
         return articleParts;
+    }
+
+    @ParametersAreNonnullByDefault
+    public void saveArticle(Realm realm){
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.copyToRealmOrUpdate(mArticle);
+                realm.copyToRealm(mArticleParts);
+            }
+        });
+    }
+
+    @ParametersAreNonnullByDefault
+    public void deleteArticle(Realm realm){
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.where(Article.class).equalTo(Article.LINK, mArticle.getLink()).findAll().deleteAllFromRealm();
+                realm.where(ArticlePart.class).equalTo(ArticlePart.ARTICLE_LINK, mArticle.getLink())
+                        .findAll().deleteAllFromRealm();
+            }
+        });
+    }
+
+    @ParametersAreNonnullByDefault
+    public boolean checkArticleInRealm(Realm realm){
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                if(!realm.where(Article.class).equalTo(Article.LINK, mArticle.getLink()).findAll().isEmpty()){
+                    mArticleParts.addAll(realm.copyFromRealm(realm.where(ArticlePart.class)
+                            .equalTo(ArticlePart.ARTICLE_LINK, mArticle.getLink()).findAll()));
+                }
+            }
+        });
+        return (mArticleParts.size() > 0);
     }
 }

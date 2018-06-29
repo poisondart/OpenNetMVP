@@ -68,7 +68,8 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
 
     private ArticlePartAdapter mArticlePartAdapter;
     private LinearLayoutManager mLinearLayoutManager;
-    private String mTitle, mDate, mCat, mLink;
+    private String mCat;
+    private Article mArticle;
 
     private boolean mAdded = false;
 
@@ -95,7 +96,7 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
         actionBar.getSupportActionBar().setTitle(mCat);
         mArticlePartAdapter = new ArticlePartAdapter();
         mArticlePartAdapter.setOnItemClickListener(this);
-        mArticlePartAdapter.setTitleAndDate(mTitle, mDate);
+        mArticlePartAdapter.setTitleAndDate(mArticle.getTitle(), mArticle.getDate());
         mLinearLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setNestedScrollingEnabled(false);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
@@ -117,11 +118,12 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(getArguments() != null){
-            mLink = (String)getArguments().getSerializable(ARG_ARTICLE_LINK);
-            mTitle = (String)getArguments().getSerializable(ARG_ARTICLE_TITLE);
-            mDate = (String)getArguments().getSerializable(ARG_ARTICLE_DATE);
+            String link = (String)getArguments().getSerializable(ARG_ARTICLE_LINK);
+            String title = (String)getArguments().getSerializable(ARG_ARTICLE_TITLE);
+            String date = (String)getArguments().getSerializable(ARG_ARTICLE_DATE);
             mCat = (String)getArguments().getSerializable(ARG_ARTICLE_CATEGORY);
-            mArticlePresenter.setLink(mLink);
+            mArticle = new Article(date, title, link);
+            mArticlePresenter.setArticle(mArticle);
             setHasOptionsMenu(true);
         }
 
@@ -133,15 +135,17 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
             case R.id.share_button:
                 Intent i = new Intent(Intent.ACTION_SEND);
                 i.setType("text/plain");
-                i.putExtra(Intent.EXTRA_TEXT, mLink);
-                i.putExtra(Intent.EXTRA_SUBJECT, mTitle);
+                i.putExtra(Intent.EXTRA_TEXT, mArticle.getLink());
+                i.putExtra(Intent.EXTRA_SUBJECT, mArticle.getTitle());
                 startActivity(Intent.createChooser(i, getString(R.string.share_link_hint)));
                 break;
             case R.id.save_button:
                 if (mAdded){
                     mSaveButton.setImageResource(R.drawable.ic_fav_button);
+                    mArticlePresenter.deleteArticleFromRealm();
                 }else{
                     mSaveButton.setImageResource(R.drawable.ic_delete_button);
+                    mArticlePresenter.saveArticleToRealm();
                 }
                 mAdded = !mAdded;
                 break;
@@ -176,11 +180,9 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
 
     @Override
     public void showArticle(List<ArticlePart> articleParts) {
-        //mArticlePresenter.showLoading(true);
         setUpdating(true);
         mArticlePartAdapter.setParts(articleParts);
         mArticlePartAdapter.notifyDataSetChanged();
-        //mArticlePresenter.showLoading(false);
         setUpdating(false);
     }
 
@@ -207,6 +209,17 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
             mSaveButton.setVisibility(View.VISIBLE);
             mShareButton.setVisibility(View.VISIBLE);
             mCommentsButton.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void showSavingIcon(boolean isShowing) {
+        if(isShowing){
+            mSaveButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_delete_button));
+            mAdded = true;
+        }else{
+            mSaveButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_fav_button));
+            mAdded = false;
         }
     }
 

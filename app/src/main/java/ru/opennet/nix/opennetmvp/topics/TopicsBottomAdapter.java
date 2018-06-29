@@ -29,18 +29,10 @@ public class TopicsBottomAdapter extends RecyclerView.Adapter<TopicsBottomAdapte
     public TopicsBottomAdapter() {
         super();
         mTopicItems = new ArrayList<>();
-        initTopics();
     }
 
-    private void initTopics(){
-        mTopicItems.add(new TopicItem("Главные новости", Links.MAIN_NEWS_RSS_LINK));
-        mTopicItems.add(new TopicItem("Новые версии ПО", Links.MAIN_NEW_SOFT_UPDATE_RSS_LINK));
-        mTopicItems.add(new TopicItem("Проблемы безопасности", Links.MAIN_SECURITY_PROB_RSS_LINK));
-        mTopicItems.add(new TopicItem("Ubuntu", Links.UBUNTU_NEWS_RSS_LINK));
-        mTopicItems.add(new TopicItem("Linux", Links.MAIN_LINUX_RSS_LINK));
-        mTopicItems.add(new TopicItem("Fedora", Links.MAIN_FEDORA_RSS_LINK));
-        mTopicItems.add(new TopicItem("BSD", Links.MAIN_BSD_RSS_LINK));
-        mTopicItems.add(new TopicItem("Mozilla/Firefox", Links.MAIN_MOZILLA_FIREFOX_RSS_LINK));
+    public void setTopics(List<TopicItem> topics){
+        mTopicItems = topics;
     }
 
     @NonNull
