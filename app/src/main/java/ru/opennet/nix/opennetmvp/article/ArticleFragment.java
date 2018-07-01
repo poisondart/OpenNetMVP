@@ -59,7 +59,7 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
     ProgressBar mComProgressBar;
 
     @BindView(R.id.loading_com_textview)
-    TextView mLoadingComTextview;
+    TextView mLoadingComTextView;
 
     private static final String ARG_ARTICLE_LINK = "article_link";
     private static final String ARG_ARTICLE_TITLE = "article_title";
@@ -94,6 +94,7 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
         actionBar.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         actionBar.getSupportActionBar().setDisplayShowHomeEnabled(true);
         actionBar.getSupportActionBar().setTitle(mCat);
+        mArticlePresenter.setArticle(mArticle);
         mArticlePartAdapter = new ArticlePartAdapter();
         mArticlePartAdapter.setOnItemClickListener(this);
         mArticlePartAdapter.setTitleAndDate(mArticle.getTitle(), mArticle.getDate());
@@ -123,7 +124,6 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
             String date = (String)getArguments().getSerializable(ARG_ARTICLE_DATE);
             mCat = (String)getArguments().getSerializable(ARG_ARTICLE_CATEGORY);
             mArticle = new Article(date, title, link);
-            mArticlePresenter.setArticle(mArticle);
             setHasOptionsMenu(true);
         }
 
@@ -196,14 +196,14 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
     @Override
     public void showCommentsLinkLoading(boolean isLoading) {
         if(isLoading){
-            mLoadingComTextview.setVisibility(View.VISIBLE);
+            mLoadingComTextView.setVisibility(View.VISIBLE);
             mComProgressBar.setVisibility(View.VISIBLE);
 
             mSaveButton.setVisibility(View.INVISIBLE);
             mShareButton.setVisibility(View.INVISIBLE);
             mCommentsButton.setVisibility(View.INVISIBLE);
         }else{
-            mLoadingComTextview.setVisibility(View.INVISIBLE);
+            mLoadingComTextView.setVisibility(View.INVISIBLE);
             mComProgressBar.setVisibility(View.INVISIBLE);
 
             mSaveButton.setVisibility(View.VISIBLE);

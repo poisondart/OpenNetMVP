@@ -3,7 +3,7 @@
     <string name="comments_title">Комментарии</string>
     <string name="share_link_hint">Поделиться статьёй</string>
     <string name="load_com_link_hint">Загрузка комментариев&#8230;</string>
-    <string name="favs_hint">Здесь будут сохранённые статьи</string>
+    <string name="favs_hint">Здесь будут сохранённые статьи. Долгим кликом по элементу списка можно удалить статью.</string>
     <string name="saved">Сохранённое</string>
     <!-- NavigationView Menu Items-->
     <string name="main_news">Главные новости</string>

@@ -35,6 +35,6 @@ public class ArticleActivity extends AppCompatActivity {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         ArticleFragment fragment = ArticleFragment.newInstance(link, title, date, cat);
-        fragmentManager.beginTransaction().add(R.id.article_fragment_host, fragment).commit();
+        fragmentManager.beginTransaction().add(R.id.article_fragment_host, fragment).commitAllowingStateLoss();
     }
 }

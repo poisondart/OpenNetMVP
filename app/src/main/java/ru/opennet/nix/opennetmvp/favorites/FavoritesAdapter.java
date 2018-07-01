@@ -23,12 +23,9 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.Favo
         mArticles = new ArrayList<>();
     }
 
-    public String getFavLink(int pos){
-        return mArticles.get(pos).getLink();
-    }
-
     public interface OnFavsItemClicked{
         void onFavsItemClicked(String url, String title, String date);
+        void onFavsItemLongClicked(String url, int pos);
     }
 
     public void setOnFavsItemClickedListener(OnFavsItemClicked callback){
@@ -56,7 +53,7 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.Favo
         return mArticles.size();
     }
 
-    class FavoritesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class FavoritesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
 
         @BindView(R.id.dateview_fav)
         TextView mDateView;
@@ -70,6 +67,7 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.Favo
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
         }
 
         public void bindArticle(Article article){
@@ -81,6 +79,12 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.Favo
         @Override
         public void onClick(View view) {
             mCallback.onFavsItemClicked(mArticle.getLink(), mArticle.getTitle(), mArticle.getDate());
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            mCallback.onFavsItemLongClicked(mArticle.getLink(), getLayoutPosition());
+            return true;
         }
     }
 }
