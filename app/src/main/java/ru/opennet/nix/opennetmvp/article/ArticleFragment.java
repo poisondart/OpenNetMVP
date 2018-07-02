@@ -19,6 +19,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.arellomobile.mvp.viewstate.strategy.SkipStrategy;
+import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import java.util.List;
 import butterknife.BindView;
@@ -187,6 +189,7 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
     }
 
     @Override
+    @StateStrategyType(SkipStrategy.class)
     public void startCommentsActivity(String link) {
         showCommentsLinkLoading(false);
         Intent intent = CommentsActivity.newInstance(getContext(), link);

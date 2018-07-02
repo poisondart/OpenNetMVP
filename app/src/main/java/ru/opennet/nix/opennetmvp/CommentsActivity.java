@@ -21,9 +21,11 @@ public class CommentsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comments);
-        String link = getIntent().getStringExtra(EXTRA_LINK_COMMENTS);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        CommentFragment fragment = CommentFragment.newInstance(link);
-        fragmentManager.beginTransaction().add(R.id.comments_fragment_host, fragment).commit();
+        if(savedInstanceState == null){
+            String link = getIntent().getStringExtra(EXTRA_LINK_COMMENTS);
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            CommentFragment fragment = CommentFragment.newInstance(link);
+            fragmentManager.beginTransaction().add(R.id.comments_fragment_host, fragment).commit();
+        }
     }
 }

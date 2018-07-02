@@ -28,13 +28,15 @@ public class ArticleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article);
 
-        String link = getIntent().getStringExtra(EXTRA_LINK);
-        String title = getIntent().getStringExtra(EXTRA_TITLE);
-        String date = getIntent().getStringExtra(EXTRA_DATE);
-        String cat = getIntent().getStringExtra(EXTRA_CATEGORY);
+        if(savedInstanceState == null) {
+            String link = getIntent().getStringExtra(EXTRA_LINK);
+            String title = getIntent().getStringExtra(EXTRA_TITLE);
+            String date = getIntent().getStringExtra(EXTRA_DATE);
+            String cat = getIntent().getStringExtra(EXTRA_CATEGORY);
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        ArticleFragment fragment = ArticleFragment.newInstance(link, title, date, cat);
-        fragmentManager.beginTransaction().add(R.id.article_fragment_host, fragment).commitAllowingStateLoss();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            ArticleFragment fragment = ArticleFragment.newInstance(link, title, date, cat);
+            fragmentManager.beginTransaction().add(R.id.article_fragment_host, fragment).commitAllowingStateLoss();
+        }
     }
 }
