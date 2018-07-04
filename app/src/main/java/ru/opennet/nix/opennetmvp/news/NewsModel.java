@@ -30,7 +30,7 @@ public class NewsModel {
         loadNewsTask.execute();
     }
 
-    interface LoadNewsCallback{
+    public interface LoadNewsCallback{
         void onLoad(List<NewsItem> items);
     }
 

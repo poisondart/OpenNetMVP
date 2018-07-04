@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import java.util.ArrayList;
@@ -21,11 +23,12 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.opennet.nix.opennetmvp.ArticleActivity;
+import ru.opennet.nix.opennetmvp.OpenNetService;
 import ru.opennet.nix.opennetmvp.R;
 import ru.opennet.nix.opennetmvp.topics.TopicItem;
 import ru.opennet.nix.opennetmvp.topics.TopicsBottomAdapter;
 import ru.opennet.nix.opennetmvp.utils.Links;
-import ru.opennet.nix.opennetmvp.utils.Preferences;
+import ru.opennet.nix.opennetmvp.utils.OpenNetPreferences;
 
 public class NewsFragment extends MvpAppCompatFragment implements TopicsBottomAdapter.OnTopicItemClicked, NewsView,
     NewsAdapter.OnNewsItemClicked{
@@ -51,16 +54,16 @@ public class NewsFragment extends MvpAppCompatFragment implements TopicsBottomAd
     private LinearLayoutManager mTopicsLinearLayoutManager;
     private LinearLayoutManager mNewsLinearLayoutManager;
     private BottomSheetBehavior mBottomSheetBehaviour;
-    private Preferences mPreferences;
+    private OpenNetPreferences mOpenNetPreferences;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.news_fragment_layout, container, false);
         ButterKnife.bind(this, v);
-        mPreferences = new Preferences(getContext());
-        mChosenTopicTextView.setText(mPreferences.getTopicTitle(getContext()));
-        mNewsPresenter.setLink(mPreferences.getTopicLink());
+        mOpenNetPreferences = new OpenNetPreferences(getContext());
+        mChosenTopicTextView.setText(mOpenNetPreferences.getTopicTitle(getContext()));
+        mNewsPresenter.setLink(mOpenNetPreferences.getTopicLink());
         mBottomSheetBehaviour = BottomSheetBehavior.from(mllBottomSheet);
         mVisibleLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,6 +100,8 @@ public class NewsFragment extends MvpAppCompatFragment implements TopicsBottomAd
             }
         });
 
+        OpenNetService.setServiceAlarm(getActivity(), OpenNetService.isServiceAlarmOn(getActivity()));
+
         return v;
     }
 
@@ -104,8 +109,8 @@ public class NewsFragment extends MvpAppCompatFragment implements TopicsBottomAd
     @Override
     public void TopicItemClicked(String title, String url) {
         mChosenTopicTextView.setText(title);
-        mPreferences.setTopicTitle(title);
-        mPreferences.setTopicLink(url);
+        mOpenNetPreferences.setTopicTitle(title);
+        mOpenNetPreferences.setTopicLink(url);
         mBottomSheetBehaviour.setState(BottomSheetBehavior.STATE_COLLAPSED);
         mNewsPresenter.showLoading(true);
         mNewsPresenter.setLink(url);
@@ -115,7 +120,7 @@ public class NewsFragment extends MvpAppCompatFragment implements TopicsBottomAd
 
     @Override
     public void onNewsItemClicked(String url, String title, String date) {
-        Intent intent = ArticleActivity.newIntent(getContext(), url, title, date, mPreferences.getTopicTitle(getContext()));
+        Intent intent = ArticleActivity.newIntent(getContext(), url, title, date, mOpenNetPreferences.getTopicTitle(getContext()));
         startActivity(intent);
     }
 
