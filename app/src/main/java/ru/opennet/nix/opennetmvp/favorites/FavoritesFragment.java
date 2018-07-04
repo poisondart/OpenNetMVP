@@ -1,15 +1,18 @@
 package ru.opennet.nix.opennetmvp.favorites;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import java.util.List;
@@ -68,8 +71,23 @@ public class FavoritesFragment extends MvpAppCompatFragment implements Favorites
     }
 
     @Override
-    public void onFavsItemLongClicked(String url, int pos) {
-        mFavoritesPresenter.deleteArticleFromRealm(url);
-        mAdapter.notifyItemRemoved(pos);
+    public void onFavsItemLongClicked(final String url, final int pos) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage(R.string.delete_this_proof);
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                mFavoritesPresenter.deleteArticleFromRealm(url);
+                mAdapter.notifyItemRemoved(pos);
+                Toast.makeText(getContext(), getString(R.string.article_deleted), Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+            }
+        });
+        builder.show();
     }
 }

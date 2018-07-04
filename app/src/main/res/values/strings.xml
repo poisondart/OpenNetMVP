@@ -5,6 +5,10 @@
     <string name="load_com_link_hint">Загрузка комментариев&#8230;</string>
     <string name="favs_hint">Здесь будут сохранённые статьи. Долгим кликом по элементу списка можно удалить статью.</string>
     <string name="saved">Сохранённое</string>
+    <string name="delete_this_proof">Удалить эту статью?</string>
+    <string name="delete_all_proof">Удалить все статьи?</string>
+    <string name="all_articles_deleted">Все статьи удалены</string>
+    <string name="article_deleted">Статья удалена</string>
     <!-- NavigationView Menu Items-->
     <string name="main_news">Главные новости</string>
     <string name="safety">Проблемы безопасности</string>

@@ -7,9 +7,6 @@
             android:title="@string/notifications"
             android:summary="@string/notifications_des"
             android:defaultValue="false"/>
-        <Preference
-            android:key="@string/delete_all_favs_key"
-            android:title="@string/delete_all_favs"/>
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/about_cath">

@@ -46,9 +46,6 @@ public class PreferenceFragment extends PreferenceFragmentCompat implements
             case "licence_key":
                 //showLicenses();
                 break;
-            case "delete_key":
-                //удалить все статьи
-                break;
             case "notifications_key":
                 boolean shouldStartAlarm = !OpenNetService.isServiceAlarmOn(getActivity());
                 OpenNetService.setServiceAlarm(getActivity(), shouldStartAlarm);
@@ -56,6 +53,5 @@ public class PreferenceFragment extends PreferenceFragmentCompat implements
         }
         return true;
     }
-
 
 }
