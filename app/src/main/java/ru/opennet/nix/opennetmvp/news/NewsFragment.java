@@ -102,6 +102,13 @@ public class NewsFragment extends MvpAppCompatFragment implements TopicsBottomAd
 
         OpenNetService.setServiceAlarm(getActivity(), OpenNetService.isServiceAlarmOn(getActivity()));
 
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                setUpdating(true);
+                mNewsPresenter.loadNews();
+            }
+        });
         return v;
     }
 

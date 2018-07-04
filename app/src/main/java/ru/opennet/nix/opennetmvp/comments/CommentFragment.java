@@ -72,6 +72,13 @@ public class CommentFragment extends MvpAppCompatFragment implements CommentsVie
         mRecyclerView.setLayoutManager(mLinearLayout);
         mRecyclerView.setAdapter(mCommentsAdapter);
         mCommentsPresenter.setLink(mLink);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                setUpdating(true);
+                mCommentsPresenter.loadComments();
+            }
+        });
         return v;
     }
 

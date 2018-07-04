@@ -9,6 +9,7 @@
     <string name="delete_all_proof">Удалить все статьи?</string>
     <string name="all_articles_deleted">Все статьи удалены</string>
     <string name="article_deleted">Статья удалена</string>
+    <string name="article_is_added">Статья добавлена в избранное</string>
     <!-- NavigationView Menu Items-->
     <string name="main_news">Главные новости</string>
     <string name="safety">Проблемы безопасности</string>

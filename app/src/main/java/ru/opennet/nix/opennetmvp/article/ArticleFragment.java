@@ -17,6 +17,8 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.viewstate.strategy.SkipStrategy;
@@ -145,9 +147,11 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
                 if (mAdded){
                     mSaveButton.setImageResource(R.drawable.ic_fav_button);
                     mArticlePresenter.deleteArticleFromRealm();
+                    Toast.makeText(getContext(), getString(R.string.article_deleted), Toast.LENGTH_SHORT).show();
                 }else{
                     mSaveButton.setImageResource(R.drawable.ic_delete_button);
                     mArticlePresenter.saveArticleToRealm();
+                    Toast.makeText(getContext(), getString(R.string.article_is_added), Toast.LENGTH_SHORT).show();
                 }
                 mAdded = !mAdded;
                 break;
