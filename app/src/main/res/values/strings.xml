@@ -50,7 +50,7 @@
     <string name="app_title">Проект OpenNET</string>
     <string name="app_subtitle">Неофициальное приложение под Android</string>
     <string name="app_key">app_key</string>
-    <string name="app_vesion">0.7.0-alpha. Сборка от 04.07.2018</string>
+    <string name="app_vesion">0.7.1-alpha. Сборка от 04.08.2018</string>
     <string name="go_site">Посетить сайт opennet.ru</string>
     <string name="go_dev">Связаться с разработчиком</string>
     <string name="go_dev_key">dev_key</string>

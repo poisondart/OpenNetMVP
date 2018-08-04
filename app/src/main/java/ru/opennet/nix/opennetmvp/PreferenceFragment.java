@@ -1,11 +1,19 @@
 package ru.opennet.nix.opennetmvp;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.widget.Toast;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class PreferenceFragment extends PreferenceFragmentCompat implements
         Preference.OnPreferenceClickListener{
@@ -14,6 +22,12 @@ public class PreferenceFragment extends PreferenceFragmentCompat implements
 
     public PreferenceFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initLicenseMessage();
     }
 
     @Override
@@ -44,7 +58,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat implements
                 }
                 break;
             case "licence_key":
-                //showLicenses();
+                showLicenses();
                 break;
             case "notifications_key":
                 boolean shouldStartAlarm = !OpenNetService.isServiceAlarmOn(getActivity());
@@ -53,5 +67,41 @@ public class PreferenceFragment extends PreferenceFragmentCompat implements
         }
         return true;
     }
+    private void initLicenseMessage(){
+        try{
+            AssetManager assetManager = getActivity().getAssets();
+            InputStream inputStream = assetManager.open("license.txt");
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            String receiveString;
+            StringBuilder stringBuilder = new StringBuilder();
 
+            while ( (receiveString = bufferedReader.readLine()) != null ) {
+                if(receiveString.equals("")){
+                    stringBuilder.append(System.getProperty("line.separator"));
+                }else{
+                    stringBuilder.append(receiveString);
+                }
+            }
+            inputStream.close();
+            mMessage = stringBuilder.toString();
+
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+    private void showLicenses(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(R.string.licence)
+                .setMessage(mMessage)
+                .setCancelable(false)
+                .setPositiveButton("ОК",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
 }
