@@ -196,8 +196,13 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
     @StateStrategyType(SkipStrategy.class)
     public void startCommentsActivity(String link) {
         showCommentsLinkLoading(false);
-        Intent intent = CommentsActivity.newInstance(getContext(), link);
-        startActivity(intent);
+        if(link != null && !link.isEmpty()){
+            Intent intent = CommentsActivity.newInstance(getContext(), link);
+            startActivity(intent);
+        }else{
+            Toast.makeText(getContext(), R.string.cannot_load_comments, Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     @Override

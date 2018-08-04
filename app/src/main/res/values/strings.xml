@@ -32,6 +32,7 @@
     <string name="comment_desc">Она там поди уже сто лет в обед.</string>
     <!-- Error Messages -->
     <string name="cannot_play_video">Невозможно воспроизвести видео</string>
+    <string name="cannot_load_comments">Не получилось загрузить комментарии. Попробуйте позже</string>
     <!-- -->
     <!-- Settings-->
     <string name="common_cat">Общие</string>
