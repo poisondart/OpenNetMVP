@@ -40,7 +40,7 @@ public class OpenNetService extends IntentService {
             return;
         }
 
-        NewsModel model = new NewsModel();
+        NewsModel model = new NewsModel(NewsModel.RequestCount.FIRST_ONLY);
         model.setLink(Links.MAIN_NEWS_RSS_LINK);
         model.loadNews(new NewsModel.LoadNewsCallback() {
             @Override
@@ -70,7 +70,7 @@ public class OpenNetService extends IntentService {
         String lastItemID = openNetPreferences.getLastNewsID();
         NewsItem item = items.get(0);
         Log.i(TAG, "Pref Res: " + lastItemID);
-        String receivedItemID = items.get(0).getLink().substring(45);;
+        String receivedItemID = items.get(0).getLink().substring(45);
         if(receivedItemID.equals(lastItemID)){
             Log.i(TAG, "Got an old result: " + receivedItemID);
 

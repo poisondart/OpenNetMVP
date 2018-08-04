@@ -21,12 +21,20 @@ public class NewsModel {
 
     private String mRequestLink;
 
+    public enum RequestCount {ALL, FIRST_ONLY}
+
+    private RequestCount mCount;
+
+    public NewsModel(RequestCount count){
+        mCount = count;
+    }
+
     public void setLink(String link){
         mRequestLink = link;
     }
 
     public void loadNews(LoadNewsCallback callback){
-        LoadNewsTask loadNewsTask = new LoadNewsTask(mRequestLink, callback);
+        LoadNewsTask loadNewsTask = new LoadNewsTask(mRequestLink, callback, mCount);
         loadNewsTask.execute();
     }
 
@@ -38,11 +46,13 @@ public class NewsModel {
 
         private String mLink;
         private final LoadNewsCallback mCallback;
+        private RequestCount mCount;
 
-        LoadNewsTask(String link, LoadNewsCallback callback) {
+        LoadNewsTask(String link, LoadNewsCallback callback, RequestCount count) {
             super();
             mLink = link;
             mCallback = callback;
+            mCount = count;
         }
 
         @Override
@@ -64,7 +74,7 @@ public class NewsModel {
             try{
                 URL url = new URL(mLink);
                 InputStream inputStream = url.openConnection().getInputStream();
-                items = parseXMLNews(inputStream);
+                items = parseXMLNews(inputStream, mCount);
 
             }catch (MalformedURLException m){
                 m.printStackTrace();
@@ -77,7 +87,8 @@ public class NewsModel {
         }
     }
 
-    private static List<NewsItem> parseXMLNews(InputStream inputStream) throws XmlPullParserException, IOException{
+    private static List<NewsItem> parseXMLNews(InputStream inputStream, RequestCount count)
+            throws XmlPullParserException, IOException{
         String title = null;
         String pubDate = null;
         String descr = null;
@@ -153,6 +164,9 @@ public class NewsModel {
                     if (isItem) {
                         NewsItem item = new NewsItem(pubDate, title, descr, link);
                         items.add(item);
+                        if(count == RequestCount.FIRST_ONLY){
+                            return items;
+                        }
                     }
 
                     title = null;

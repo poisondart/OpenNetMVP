@@ -10,7 +10,7 @@ public class NewsPresenter extends MvpPresenter<NewsView> {
     private NewsModel mNewsModel;
 
     public NewsPresenter(){
-        mNewsModel = new NewsModel();
+        mNewsModel = new NewsModel(NewsModel.RequestCount.ALL);
     }
 
     @Override
