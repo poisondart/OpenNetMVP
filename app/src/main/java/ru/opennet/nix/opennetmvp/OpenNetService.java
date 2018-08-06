@@ -94,9 +94,9 @@ public class OpenNetService extends IntentService {
                     NotificationManagerCompat.from(this);
             notificationManager.notify(0, notification);
 
+            openNetPreferences.setLastNewsID(receivedItemID);
         }
 
-        openNetPreferences.setLatsNewsID(receivedItemID);
     }
 
     public static void setServiceAlarm(Context context, boolean isOn){

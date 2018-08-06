@@ -30,7 +30,7 @@ public class OpenNetPreferences {
         return mSharedPreferences.getString(LAST_NEWS_GUID, null);
     }
 
-    public void setLatsNewsID(String latsNewsID){
+    public void setLastNewsID(String latsNewsID){
         mEditor = mSharedPreferences.edit();
         mEditor.putString(LAST_NEWS_GUID, latsNewsID);
         mEditor.apply();

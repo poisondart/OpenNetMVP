@@ -20,4 +20,10 @@
         <item name="android:navigationBarColor">@color/colorPrimaryDark</item>
         <item name="android:statusBarColor">@color/colorWhiteGreen</item>
     </style>
+
+    <style name="Theme.Swipe.Back.NoActionBar" parent="ArticleTheme">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
 </resources>

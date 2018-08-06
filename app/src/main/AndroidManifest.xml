@@ -22,10 +22,10 @@
         </activity>
         <activity
             android:name=".ArticleActivity"
-            android:theme="@style/ArticleTheme">
+            android:theme="@style/Theme.Swipe.Back.NoActionBar">
         </activity>
         <activity android:name=".CommentsActivity"
-            android:theme="@style/ArticleTheme">
+            android:theme="@style/Theme.Swipe.Back.NoActionBar">
         </activity>
         <service android:name=".OpenNetService"/>
     </application>
