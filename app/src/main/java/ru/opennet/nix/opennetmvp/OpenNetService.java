@@ -22,7 +22,7 @@ import ru.opennet.nix.opennetmvp.utils.OpenNetPreferences;
 public class OpenNetService extends IntentService {
 
     private static final String TAG = "OpenNetPollService";
-    private static final long POLL_INTERVAL = AlarmManager.INTERVAL_HALF_HOUR;
+    private static final long POLL_INTERVAL = AlarmManager.INTERVAL_FIFTEEN_MINUTES;
 
     public static Intent newIntent(Context context){
         return new Intent(context, OpenNetService.class);

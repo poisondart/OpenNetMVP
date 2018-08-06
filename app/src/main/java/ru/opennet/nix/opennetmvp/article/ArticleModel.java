@@ -124,7 +124,12 @@ public class ArticleModel {
         String comlink = "";
         mDocument = Jsoup.connect(url).get();
         mElement = mDocument.select("input[name = om]").first();
-        comlink = mElement.attr("value");
+        if(mElement.hasAttr("value")){
+            comlink = mElement.attr("value");
+        }else{
+            return null;
+        }
+
         return Links.COMMENTS_LINK.concat(comlink);
     }
 

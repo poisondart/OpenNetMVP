@@ -38,7 +38,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/article_recyclerview"
-                android:layout_below="@+id/progressbar_article"/>
+                android:layout_below="@+id/progressbar_article"
+                android:scrollbars="vertical"/>
         </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>
 
