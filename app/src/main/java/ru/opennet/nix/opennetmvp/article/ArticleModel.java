@@ -124,7 +124,7 @@ public class ArticleModel {
         String comlink = "";
         mDocument = Jsoup.connect(url).get();
         mElement = mDocument.select("input[name = om]").first();
-        if(mElement.hasAttr("value")){
+        if(mElement != null && mElement.hasAttr("value")){
             comlink = mElement.attr("value");
         }else{
             return null;

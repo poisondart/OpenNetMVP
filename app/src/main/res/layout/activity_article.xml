@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     app:directionMode="left"
     app:isSwipeFromEdge="false"
-    app:maskAlpha="0"
+    app:maskAlpha="125"
     app:swipeBackFactor="0.5">
     <FrameLayout
         android:layout_width="match_parent"

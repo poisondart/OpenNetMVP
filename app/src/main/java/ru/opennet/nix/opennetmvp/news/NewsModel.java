@@ -9,13 +9,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
+
+import ru.opennet.nix.opennetmvp.utils.DateUtils;
 
 public class NewsModel {
 
@@ -141,14 +138,7 @@ public class NewsModel {
                 if (name.equalsIgnoreCase("title")) {
                     title = result;
                 } else if (name.equalsIgnoreCase("pubDate")) {
-                    DateFormat oldDateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.ENGLISH);
-                    DateFormat newDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:MM", new Locale("ru"));
-                    try{
-                        Date date = oldDateFormat.parse(result);
-                        pubDate = newDateFormat.format(date);
-                    }catch (ParseException p){
-                        p.printStackTrace();
-                    }
+                    pubDate = DateUtils.getNewsDate(result);
                 } else if (name.equalsIgnoreCase("description")) {
                     if(!hook){
                         descr = result;

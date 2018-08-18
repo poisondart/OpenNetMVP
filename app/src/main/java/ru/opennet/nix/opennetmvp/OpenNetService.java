@@ -10,7 +10,6 @@ import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import java.util.List;
@@ -69,6 +68,12 @@ public class OpenNetService extends IntentService {
         OpenNetPreferences openNetPreferences = new OpenNetPreferences(getApplicationContext());
         String lastItemID = openNetPreferences.getLastNewsID();
         NewsItem item = items.get(0);
+
+        String link = item.getLink();
+        String title = item.getTitle();
+        String desc = item.getDesc();
+        String date = item.getDate();
+
         Log.i(TAG, "Pref Res: " + lastItemID);
         String receivedItemID = items.get(0).getLink().substring(45);
         if(receivedItemID.equals(lastItemID)){
@@ -78,14 +83,14 @@ public class OpenNetService extends IntentService {
             Log.i(TAG, "Got a new result: " + receivedItemID);
             Resources resources = getResources();
             Intent i = ArticleActivity.newIntent(getApplicationContext(),
-                    item.getLink(), item.getTitle(), item.getDate(), resources.getString(R.string.main_news));
+                    link, title, date, resources.getString(R.string.main_news));
             PendingIntent pi = PendingIntent.getActivity(this, 0, i, 0);
 
-            Notification notification = new NotificationCompat.Builder(this)
+            Notification notification = new Notification.Builder(this)
                     .setTicker(item.getTitle())
                     .setSmallIcon(R.drawable.ic_notification)
-                    .setContentTitle(item.getTitle())
-                    .setContentText(item.getDesc())
+                    .setContentTitle(title)
+                    .setContentInfo(desc)
                     .setContentIntent(pi)
                     .setAutoCancel(true)
                     .build();
