@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -82,15 +83,18 @@ public class OpenNetService extends IntentService {
         }else{
             Log.i(TAG, "Got a new result: " + receivedItemID);
             Resources resources = getResources();
-            Intent i = ArticleActivity.newIntent(getApplicationContext(),
+            Intent articleIntent = ArticleActivity.newIntent(getApplicationContext(),
                     link, title, date, resources.getString(R.string.main_news));
-            PendingIntent pi = PendingIntent.getActivity(this, 0, i, 0);
+            PendingIntent pi = TaskStackBuilder.create(this)
+                    .addParentStack(MainActivity.class)
+                    .addNextIntentWithParentStack(articleIntent)
+                    .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
             Notification notification = new Notification.Builder(this)
                     .setTicker(item.getTitle())
                     .setSmallIcon(R.drawable.ic_notification)
                     .setContentTitle(title)
-                    .setContentInfo(desc)
+                    .setContentText(desc)
                     .setContentIntent(pi)
                     .setAutoCancel(true)
                     .build();
