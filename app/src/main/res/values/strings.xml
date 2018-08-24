@@ -32,7 +32,7 @@
     <string name="comment_desc">Она там поди уже сто лет в обед.</string>
     <!-- Error Messages -->
     <string name="cannot_play_video">Невозможно воспроизвести видео</string>
-    <string name="cannot_load_comments">Не получилось загрузить комментарии. Попробуйте позже</string>
+    <string name="cannot_load_comments">Комментариев пока нет. Попробуйте позже</string>
     <!-- -->
     <!-- Settings-->
     <string name="common_cat">Общие</string>
@@ -50,7 +50,7 @@
     <string name="app_title">Проект OpenNET</string>
     <string name="app_subtitle">Неофициальное приложение под Android</string>
     <string name="app_key">app_key</string>
-    <string name="app_vesion">0.7.4-alpha. Сборка от 22.08.2018</string>
+    <string name="app_version">0.7.5-alpha. Сборка от 24.08.2018</string>
     <string name="go_site">Посетить сайт opennet.ru</string>
     <string name="go_dev">Связаться с разработчиком</string>
     <string name="go_dev_key">dev_key</string>

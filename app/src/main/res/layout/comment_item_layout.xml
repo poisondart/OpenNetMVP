@@ -4,17 +4,54 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/colorPrimary">
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="4dp"
         android:id="@+id/comment_holder">
+
+        <View
+            android:id="@+id/divider_first"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_marginLeft="10dp"
+            android:visibility="visible"
+            android:background="@color/colorBlack"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/divider_second"/>
+
+        <View
+            android:id="@+id/divider_second"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_marginLeft="10dp"
+            android:visibility="visible"
+            android:background="@color/colorBlack"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/divider_first"
+            app:layout_constraintRight_toLeftOf="@id/divider_third"/>
+
+        <View
+            android:id="@+id/divider_third"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_marginLeft="10dp"
+            android:visibility="visible"
+            android:background="@color/colorBlack"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/divider_second"
+            app:layout_constraintRight_toLeftOf="@id/comment_author_textview"/>
+
         <TextView
             android:id="@+id/comment_author_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/comment_author"
+            tools:text="@string/comment_author"
             android:textColor="@color/colorAccent"
             android:textSize="20sp"
             android:maxLength="16"
@@ -25,7 +62,7 @@
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
             android:layout_marginBottom="4dp"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@id/divider_third"
             app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
@@ -35,7 +72,7 @@
             android:layout_marginLeft="6dp"
             android:layout_marginRight="6dp"
             android:layout_marginTop="14dp"
-            android:text="@string/dateview"
+            tools:text="@string/dateview"
             app:layout_constraintStart_toEndOf="@id/comment_author_textview"
             app:layout_constraintTop_toTopOf="parent"/>
         <TextView
@@ -48,10 +85,10 @@
             android:layout_marginTop="4dp"
             android:textIsSelectable="true"
             android:textColor="@color/colorBlack"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@id/divider_third"
             app:layout_constraintTop_toBottomOf="@id/comment_author_textview"
             app:layout_constraintEnd_toEndOf="parent"
-            android:text="@string/newsview"
+            tools:text="@string/newsview"
             android:textSize="16sp"
             android:lineSpacingExtra="4dp"/>
     </android.support.constraint.ConstraintLayout>

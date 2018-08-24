@@ -46,7 +46,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat implements
     public boolean onPreferenceClick(Preference preference) {
         switch (preference.getKey()){
             case "app_key":
-                Toast.makeText(getActivity(), R.string.app_vesion, Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), R.string.app_version, Toast.LENGTH_LONG).show();
                 break;
             case "dev_key":
                 Intent intent = new Intent(Intent.ACTION_SENDTO);
