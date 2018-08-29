@@ -11,10 +11,15 @@ import ru.opennet.nix.opennetmvp.news.NewsFragment;
 import ru.opennet.nix.opennetmvp.utils.ViewPagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
+
     @BindView(R.id.tabs)
     TabLayout mTabLayout;
+
     @BindView(R.id.viewpager)
     ViewPager mViewPager;
+
+    private static final String CHOSEN_TAB_POSITION = "position";
+    private int mChosenPosition = 0;
 
     private final int[] mIconsIDs = {R.drawable.ic_news_tab_icon,
             R.drawable.ic_favs_tab_icon,
@@ -27,6 +32,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            mChosenPosition = savedInstanceState.getInt(CHOSEN_TAB_POSITION);
+        }
+
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setupViewPager();
@@ -34,25 +44,31 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 mTabLayout.setupWithViewPager(mViewPager);
-                mTabLayout.getTabAt(0).setIcon(mIconsIDsPressed[0]);
-                mTabLayout.getTabAt(1).setIcon(mIconsIDs[1]);
-                mTabLayout.getTabAt(2).setIcon(mIconsIDs[2]);
+                for(int i = 0; i < mTabLayout.getTabCount(); i++){
+                    if(i == mChosenPosition){
+                        mTabLayout.getTabAt(i).setIcon(mIconsIDsPressed[i]);
+                    }else{
+                        mTabLayout.getTabAt(i).setIcon(mIconsIDs[i]);
+                    }
+                }
             }
         });
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                setupSelectedTab(tab.getPosition());
+                mChosenPosition = tab.getPosition();
+                mTabLayout.getTabAt(mChosenPosition).setIcon(mIconsIDsPressed[mChosenPosition]);
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-                setupUnselectedTab(tab.getPosition());
+                mTabLayout.getTabAt(tab.getPosition()).setIcon(mIconsIDs[tab.getPosition()]);
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-                //do nothing
+                mChosenPosition = tab.getPosition();
+                mTabLayout.getTabAt(mChosenPosition).setIcon(mIconsIDsPressed[mChosenPosition]);
             }
         });
     }
@@ -66,30 +82,9 @@ public class MainActivity extends AppCompatActivity {
         mViewPager.setAdapter(viewPagerAdapter);
     }
 
-    private void setupSelectedTab(int id){
-        switch (id){
-            case 0:
-                mTabLayout.getTabAt(id).setIcon(mIconsIDsPressed[0]);
-                break;
-            case 1:
-                mTabLayout.getTabAt(id).setIcon(mIconsIDsPressed[1]);
-                break;
-            case 2:
-                mTabLayout.getTabAt(id).setIcon(mIconsIDsPressed[2]);
-                break;
-        }
-    }
-    private void setupUnselectedTab(int id){
-        switch (id){
-            case 0:
-                mTabLayout.getTabAt(id).setIcon(mIconsIDs[0]);
-                break;
-            case 1:
-                mTabLayout.getTabAt(id).setIcon(mIconsIDs[1]);
-                break;
-            case 2:
-                mTabLayout.getTabAt(id).setIcon(mIconsIDs[2]);
-                break;
-        }
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt(CHOSEN_TAB_POSITION, mChosenPosition);
+        super.onSaveInstanceState(outState);
     }
 }

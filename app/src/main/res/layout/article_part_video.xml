@@ -13,7 +13,7 @@
         android:layout_width="85dp"
         android:layout_height="85dp"
         android:layout_centerInParent="true"
-        android:src="@drawable/ic_youtube_white"/>
+        android:src="@drawable/ic_youtube"/>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="250dp"

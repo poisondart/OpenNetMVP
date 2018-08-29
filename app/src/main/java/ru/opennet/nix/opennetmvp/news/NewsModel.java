@@ -9,24 +9,29 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
+
+import ru.opennet.nix.opennetmvp.utils.DateUtils;
 
 public class NewsModel {
 
     private String mRequestLink;
+
+    public enum RequestCount {ALL, FIRST_ONLY}
+
+    private RequestCount mCount;
+
+    public NewsModel(RequestCount count){
+        mCount = count;
+    }
 
     public void setLink(String link){
         mRequestLink = link;
     }
 
     public void loadNews(LoadNewsCallback callback){
-        LoadNewsTask loadNewsTask = new LoadNewsTask(mRequestLink, callback);
+        LoadNewsTask loadNewsTask = new LoadNewsTask(mRequestLink, callback, mCount);
         loadNewsTask.execute();
     }
 
@@ -38,11 +43,13 @@ public class NewsModel {
 
         private String mLink;
         private final LoadNewsCallback mCallback;
+        private RequestCount mCount;
 
-        LoadNewsTask(String link, LoadNewsCallback callback) {
+        LoadNewsTask(String link, LoadNewsCallback callback, RequestCount count) {
             super();
             mLink = link;
             mCallback = callback;
+            mCount = count;
         }
 
         @Override
@@ -64,7 +71,7 @@ public class NewsModel {
             try{
                 URL url = new URL(mLink);
                 InputStream inputStream = url.openConnection().getInputStream();
-                items = parseXMLNews(inputStream);
+                items = parseXMLNews(inputStream, mCount);
 
             }catch (MalformedURLException m){
                 m.printStackTrace();
@@ -77,7 +84,8 @@ public class NewsModel {
         }
     }
 
-    private static List<NewsItem> parseXMLNews(InputStream inputStream) throws XmlPullParserException, IOException{
+    private static List<NewsItem> parseXMLNews(InputStream inputStream, RequestCount count)
+            throws XmlPullParserException, IOException{
         String title = null;
         String pubDate = null;
         String descr = null;
@@ -130,14 +138,7 @@ public class NewsModel {
                 if (name.equalsIgnoreCase("title")) {
                     title = result;
                 } else if (name.equalsIgnoreCase("pubDate")) {
-                    DateFormat oldDateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.ENGLISH);
-                    DateFormat newDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:MM", new Locale("ru"));
-                    try{
-                        Date date = oldDateFormat.parse(result);
-                        pubDate = newDateFormat.format(date);
-                    }catch (ParseException p){
-                        p.printStackTrace();
-                    }
+                    pubDate = DateUtils.getNewsDate(result);
                 } else if (name.equalsIgnoreCase("description")) {
                     if(!hook){
                         descr = result;
@@ -153,6 +154,9 @@ public class NewsModel {
                     if (isItem) {
                         NewsItem item = new NewsItem(pubDate, title, descr, link);
                         items.add(item);
+                        if(count == RequestCount.FIRST_ONLY){
+                            return items;
+                        }
                     }
 
                     title = null;

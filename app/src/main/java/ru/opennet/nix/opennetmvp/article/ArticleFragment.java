@@ -2,6 +2,7 @@ package ru.opennet.nix.opennetmvp.article;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
@@ -70,10 +71,13 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
     private static final String ARG_ARTICLE_DATE = "article_date";
     private static final String ARG_ARTICLE_CATEGORY = "article_category";
 
+    private static final String BUNDLE_RECYCLER_LAYOUT = "classname.recycler.layout";
+
     private ArticlePartAdapter mArticlePartAdapter;
     private LinearLayoutManager mLinearLayoutManager;
     private String mCat;
     private Article mArticle;
+    private Parcelable mParcelable;
 
     private boolean mAdded = false;
 
@@ -167,7 +171,7 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
         switch (item.getItemId()) {
             case android.R.id.home:
                 getActivity().finish();
-                return false;
+                return true;
         }
         return super.onOptionsItemSelected(item);
 
@@ -190,14 +194,20 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
         mArticlePartAdapter.setParts(articleParts);
         mArticlePartAdapter.notifyDataSetChanged();
         setUpdating(false);
+        if(mParcelable != null) mRecyclerView.getLayoutManager().onRestoreInstanceState(mParcelable);
     }
 
     @Override
     @StateStrategyType(SkipStrategy.class)
     public void startCommentsActivity(String link) {
         showCommentsLinkLoading(false);
-        Intent intent = CommentsActivity.newInstance(getContext(), link);
-        startActivity(intent);
+        if(link != null && !link.isEmpty()){
+            Intent intent = CommentsActivity.newInstance(getContext(), link);
+            startActivity(intent);
+        }else{
+            Toast.makeText(getContext(), R.string.cannot_load_comments, Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     @Override
@@ -235,5 +245,20 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
         Intent intent = YouTubeStandalonePlayer.createVideoIntent(getActivity(),
                 Links.YOUTUBE_API_KEY, link);
         startActivity(intent);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(BUNDLE_RECYCLER_LAYOUT, mRecyclerView.getLayoutManager().onSaveInstanceState());
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if(savedInstanceState != null)
+        {
+            mParcelable = savedInstanceState.getParcelable(BUNDLE_RECYCLER_LAYOUT);
+        }
     }
 }

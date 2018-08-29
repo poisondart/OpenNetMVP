@@ -8,6 +8,7 @@ import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +38,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
 
     @Override
     public void onBindViewHolder(@NonNull CommentsHolder holder, int position) {
+        holder.setIsRecyclable(false);
         holder.bindItem(mCommentList.get(position));
     }
 
@@ -59,6 +61,15 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
         @BindView(R.id.comment_holder)
         ConstraintLayout mConstraintLayout;
 
+        @BindView(R.id.divider_first)
+        View mDividerFirst;
+
+        @BindView(R.id.divider_second)
+        View mDividerSecond;
+
+        @BindView(R.id.divider_third)
+        View mDividerThird;
+
         Comment mComment;
 
         public CommentsHolder(View itemView) {
@@ -72,11 +83,20 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
             mDateView.setText(mComment.getDate());
             Spanned spanned = Html.fromHtml(mComment.getContent());
             mDescView.setText(spanned);
-            /*int pos = (mComment.getPosition() - 1) * 16 + 6;
-            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) mConstraintLayout.getLayoutParams();
-            params.setMargins(pos,0,0,0);
-            mConstraintLayout.setLayoutParams(params);
-            itemView.requestLayout();*/
+            switch (mComment.getPosition()){
+                case 1:
+                    mDividerFirst.setVisibility(View.GONE);
+                    mDividerSecond.setVisibility(View.GONE);
+                    mDividerThird.setVisibility(View.GONE);
+                    break;
+                case 2:
+                    mDividerSecond.setVisibility(View.GONE);
+                    mDividerThird.setVisibility(View.GONE);
+                    break;
+                case 3:
+                    mDividerThird.setVisibility(View.GONE);
+                    break;
+            }
         }
     }
 }

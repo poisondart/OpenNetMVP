@@ -9,14 +9,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
+
+import ru.opennet.nix.opennetmvp.utils.DateUtils;
 
 public class CommentsModel {
     private String mCommentsLink;
@@ -131,16 +127,13 @@ public class CommentsModel {
                 }
 
                 if (name.equalsIgnoreCase("author")) {
-                    author = result;
-                } else if (name.equalsIgnoreCase("pubDate")) {
-                    DateFormat oldDateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.ENGLISH);
-                    DateFormat newDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:MM", new Locale("ru"));
-                    try{
-                        Date date = oldDateFormat.parse(result);
-                        pubDate = newDateFormat.format(date);
-                    }catch (ParseException p){
-                        p.printStackTrace();
+                    if(result.length() > 20){
+                        author = result.substring(0, 17).concat("...");
+                    }else{
+                       author = result;
                     }
+                } else if (name.equalsIgnoreCase("pubDate")) {
+                    pubDate = DateUtils.getCommentDate(result);
                 } else if (name.equalsIgnoreCase("description")) {
                     if(!hook){
                         descr = result;
