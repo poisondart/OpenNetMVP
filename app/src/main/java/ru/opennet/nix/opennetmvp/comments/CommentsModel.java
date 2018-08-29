@@ -127,7 +127,11 @@ public class CommentsModel {
                 }
 
                 if (name.equalsIgnoreCase("author")) {
-                    author = result;
+                    if(result.length() > 20){
+                        author = result.substring(0, 17).concat("...");
+                    }else{
+                       author = result;
+                    }
                 } else if (name.equalsIgnoreCase("pubDate")) {
                     pubDate = DateUtils.getCommentDate(result);
                 } else if (name.equalsIgnoreCase("description")) {
