@@ -87,7 +87,7 @@ public class CommentFragment extends MvpAppCompatFragment implements CommentsVie
         switch (item.getItemId()) {
             case android.R.id.home:
                 getActivity().finish();
-                return false;
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }

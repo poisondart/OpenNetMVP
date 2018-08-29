@@ -90,4 +90,10 @@ public class FavoritesFragment extends MvpAppCompatFragment implements Favorites
         });
         builder.show();
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mFavoritesPresenter.loadFavs();
+    }
 }

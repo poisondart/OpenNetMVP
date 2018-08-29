@@ -171,7 +171,7 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
         switch (item.getItemId()) {
             case android.R.id.home:
                 getActivity().finish();
-                return false;
+                return true;
         }
         return super.onOptionsItemSelected(item);
 
