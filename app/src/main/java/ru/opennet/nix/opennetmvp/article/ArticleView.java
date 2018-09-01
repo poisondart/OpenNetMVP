@@ -12,5 +12,7 @@ public interface ArticleView extends MvpView {
     @StateStrategyType(SkipStrategy.class)
     void startCommentsActivity(String link);
     void showCommentsLinkLoading(boolean isLoading);
-    void showSavingIcon(boolean isShowing);
+    void showSavingIconState(boolean isAdded);
+    void showError(int messageStringResource);
+    void enableSaveButton(boolean enabled);
 }

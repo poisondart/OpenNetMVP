@@ -160,7 +160,6 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
                 mAdded = !mAdded;
                 break;
             case R.id.comments_button:
-                showCommentsLinkLoading(true);
                 mArticlePresenter.loadCommentsLink();
                 break;
         }
@@ -190,17 +189,14 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
 
     @Override
     public void showArticle(List<ArticlePart> articleParts) {
-        setUpdating(true);
         mArticlePartAdapter.setParts(articleParts);
         mArticlePartAdapter.notifyDataSetChanged();
-        setUpdating(false);
         if(mParcelable != null) mRecyclerView.getLayoutManager().onRestoreInstanceState(mParcelable);
     }
 
     @Override
     @StateStrategyType(SkipStrategy.class)
     public void startCommentsActivity(String link) {
-        showCommentsLinkLoading(false);
         if(link != null && !link.isEmpty()){
             Intent intent = CommentsActivity.newInstance(getContext(), link);
             startActivity(intent);
@@ -230,14 +226,24 @@ public class ArticleFragment extends MvpAppCompatFragment implements ArticleView
     }
 
     @Override
-    public void showSavingIcon(boolean isShowing) {
-        if(isShowing){
+    public void showSavingIconState(boolean isAdded) {
+        if(isAdded){
             mSaveButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_delete_button));
             mAdded = true;
         }else{
             mSaveButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_fav_button));
             mAdded = false;
         }
+    }
+
+    @Override
+    public void showError(int messageStringResource) {
+        Toast.makeText(getContext(), messageStringResource, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void enableSaveButton(boolean enabled) {
+        mSaveButton.setEnabled(enabled);
     }
 
     @Override

@@ -2,10 +2,9 @@ package ru.opennet.nix.opennetmvp.article;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
-import com.arellomobile.mvp.viewstate.strategy.SkipStrategy;
-import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 import java.util.List;
 import io.realm.Realm;
+import ru.opennet.nix.opennetmvp.R;
 
 @InjectViewState
 public class ArticlePresenter extends MvpPresenter<ArticleView> {
@@ -21,16 +20,25 @@ public class ArticlePresenter extends MvpPresenter<ArticleView> {
     public void loadArticle() {
         if(mArticleModel.checkArticleInRealm(mRealm)){
             getViewState().showArticle(mArticleModel.getArticleParts());
-            getViewState().showSavingIcon(true);
+            getViewState().showSavingIconState(true);
+            getViewState().enableSaveButton(true);
         }else{
+            getViewState().setUpdating(true);
             mArticleModel.loadNews(new ArticleModel.LoadArticleCallback() {
                 @Override
                 public void onLoad(List<ArticlePart> articleParts) {
-                    getViewState().showArticle(articleParts);
-                    mArticleModel.setArticleParts(articleParts);
+                    if(articleParts == null){
+                        getViewState().showError(R.string.no_connection);
+                        getViewState().enableSaveButton(false);
+                    }else{
+                        getViewState().showArticle(articleParts);
+                        mArticleModel.setArticleParts(articleParts);
+                        getViewState().showSavingIconState(false);
+                        getViewState().enableSaveButton(true);
+                    }
+                    getViewState().setUpdating(false);
                 }
             });
-            getViewState().showSavingIcon(false);
         }
     }
 
@@ -47,10 +55,18 @@ public class ArticlePresenter extends MvpPresenter<ArticleView> {
     }
 
     public void loadCommentsLink(){
+        getViewState().showCommentsLinkLoading(true);
         mArticleModel.loadCommentsLink(new ArticleModel.LoadCommentsLinkCallback() {
             @Override
             public void onLoad(String commentsLink) {
-                getViewState().startCommentsActivity(commentsLink);
+                if(commentsLink.equals(ArticleModel.NO_CONNECTION)){
+                    getViewState().showError(R.string.no_connection);
+                }else if(commentsLink == null){
+                    getViewState().showError(R.string.cannot_load_comments);
+                }else{
+                    getViewState().startCommentsActivity(commentsLink);
+                }
+                getViewState().showCommentsLinkLoading(false);
             }
         });
     }

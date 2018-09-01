@@ -17,6 +17,7 @@ public class ArticleModel {
     private Article mArticle;
     private List<ArticlePart> mArticleParts = new ArrayList<>();
 
+    public static final String NO_CONNECTION = "no_connection";
 
     public void setArticleParts(List<ArticlePart> articleParts){
         mArticleParts = articleParts;
@@ -44,15 +45,15 @@ public class ArticleModel {
     }
 
     public void loadCommentsLink(LoadCommentsLinkCallback callback){
-        LoadCommentsTask loadCommentsTask = new LoadCommentsTask(mArticle.getLink(), callback);
+        LoadCommentsLinkTask loadCommentsTask = new LoadCommentsLinkTask(mArticle.getLink(), callback);
         loadCommentsTask.execute();
     }
 
-    private static class LoadCommentsTask extends AsyncTask<Void, Void, String>{
+    private static class LoadCommentsLinkTask extends AsyncTask<Void, Void, String>{
         private String mLink;
         private final LoadCommentsLinkCallback mCallback;
 
-        public LoadCommentsTask(String link, LoadCommentsLinkCallback callback) {
+        public LoadCommentsLinkTask(String link, LoadCommentsLinkCallback callback) {
             super();
             mLink = link;
             mCallback = callback;
@@ -73,13 +74,14 @@ public class ArticleModel {
 
         @Override
         protected String doInBackground(Void... voids) {
-            String comlink = "";
+            String commentsLink;
             try{
-                comlink = parseHTMLArticleCommentsLink(mLink);
+                commentsLink = parseHTMLArticleCommentsLink(mLink);
             }catch (IOException e){
                 e.printStackTrace();
+                return NO_CONNECTION;
             }
-            return comlink;
+            return commentsLink;
         }
     }
 
@@ -108,11 +110,12 @@ public class ArticleModel {
 
         @Override
         protected List<ArticlePart> doInBackground(Void... voids) {
-            List<ArticlePart> articleParts = new ArrayList<>();
+            List<ArticlePart> articleParts;
             try{
                 articleParts = parseHTMLArticle(mLink);
             }catch (IOException e){
                 e.printStackTrace();
+                return null;
             }
             return articleParts;
         }
@@ -121,27 +124,27 @@ public class ArticleModel {
     private static String parseHTMLArticleCommentsLink(String url) throws IOException{
         Document mDocument;
         Element mElement;
-        String comlink = "";
-        mDocument = Jsoup.connect(url).get();
+        String commentsLink;
+        mDocument = Jsoup.connect(url).timeout(3000).get();
         mElement = mDocument.select("input[name = om]").first();
         if(mElement != null && mElement.hasAttr("value")){
-            comlink = mElement.attr("value");
+            commentsLink = mElement.attr("value");
         }else{
             return null;
         }
 
-        return Links.COMMENTS_LINK.concat(comlink);
+        return Links.COMMENTS_LINK.concat(commentsLink);
     }
 
     private static List<ArticlePart> parseHTMLArticle(String url) throws IOException{
         Document mDocument;
         Element mElement;
-        Elements mChilds;
+        Elements mChildren;
         List<ArticlePart> articleParts = new ArrayList<>();
-            mDocument = Jsoup.connect(url).get();
+            mDocument = Jsoup.connect(url).timeout(3000).get();
             mElement = mDocument.select("td[class = chtext]").first();
-            mChilds = mElement.getAllElements();
-            for(Element e : mChilds){
+            mChildren = mElement.getAllElements();
+            for(Element e : mChildren){
                 if(e.tagName().equals("p") || e.tagName().equals("li") || e.tagName().equals("pre")){
                     ArticlePart articlePart = new ArticlePart(ArticlePart.SIMPLE_TEXT, e.html(), url);
                     articleParts.add(articlePart);
