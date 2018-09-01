@@ -15,6 +15,8 @@
 * Сихронизация сохранённых статей с помощью Google FireBase.
 * Просмотр веток форума.
 
+Также я планирую реализовать паттерн DI и покрыть проект unit-тестами.
+
 # Скриншоты
 ![Main Fragment](https://cdn1.savepice.ru/uploads/2018/9/1/9d1168f5bc87c24cedeb59081ea43f81-full.png)
 ![Choose Category](https://cdn1.savepice.ru/uploads/2018/9/1/64528e76df155c7604e689c49b2717e2-full.png)
