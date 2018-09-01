@@ -6,4 +6,5 @@ import java.util.List;
 public interface CommentsView extends MvpView {
     void setUpdating(boolean state);
     void showComments(List<Comment> comments);
+    void showError();
 }

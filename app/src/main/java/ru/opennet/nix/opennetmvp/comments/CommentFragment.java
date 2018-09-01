@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import java.util.List;
@@ -75,7 +77,6 @@ public class CommentFragment extends MvpAppCompatFragment implements CommentsVie
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                setUpdating(true);
                 mCommentsPresenter.loadComments();
             }
         });
@@ -101,6 +102,10 @@ public class CommentFragment extends MvpAppCompatFragment implements CommentsVie
     public void showComments(List<Comment> comments) {
         mCommentsAdapter.setComments(comments);
         mCommentsAdapter.notifyDataSetChanged();
-        setUpdating(false);
+    }
+
+    @Override
+    public void showError() {
+        Toast.makeText(getContext(), R.string.no_connection, Toast.LENGTH_SHORT).show();
     }
 }

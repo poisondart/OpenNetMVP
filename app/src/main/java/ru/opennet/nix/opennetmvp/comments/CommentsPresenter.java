@@ -16,21 +16,22 @@ public class CommentsPresenter extends MvpPresenter<CommentsView> {
     @Override
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
-        showLoading(true);
         loadComments();
     }
 
     public void loadComments(){
+        getViewState().setUpdating(true);
         mCommentsModel.loadComments(new CommentsModel.LoadCommentsCallback() {
             @Override
             public void onLoad(List<Comment> comments) {
-                getViewState().showComments(comments);
+                if (comments == null) {
+                    getViewState().showError();
+                }else{
+                    getViewState().showComments(comments);
+                }
+                getViewState().setUpdating(false);
             }
         });
-    }
-
-    public void showLoading(boolean state){
-        getViewState().setUpdating(state);
     }
 
     public void setLink(String link){

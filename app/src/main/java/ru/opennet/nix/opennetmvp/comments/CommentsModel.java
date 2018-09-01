@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,25 +50,30 @@ public class CommentsModel {
         protected void onPostExecute(List<Comment> comments) {
             super.onPostExecute(comments);
             if(mCallback != null){
-                //Collections.sort(comments, Comment.COMPARE_BY_POSITION);
                 mCallback.onLoad(comments);
             }
         }
 
         @Override
         protected List<Comment> doInBackground(Void... voids) {
-            List<Comment> items = new ArrayList<>();
+            List<Comment> items;
             try{
                 URL url = new URL(mLink);
-                InputStream inputStream = url.openConnection().getInputStream();
+                URLConnection connection = url.openConnection();
+                connection.setConnectTimeout(3000);
+                connection.setReadTimeout(3000);
+                InputStream inputStream = connection.getInputStream();
                 items = parseRSSComments(inputStream);
 
             }catch (MalformedURLException m){
                 m.printStackTrace();
+                return null;
             }catch (IOException e){
                 e.printStackTrace();
+                return null;
             }catch (XmlPullParserException x){
                 x.printStackTrace();
+                return null;
             }
 
             return items;
