@@ -30,11 +30,10 @@ public class OpenNetService extends IntentService {
 
     public OpenNetService() {
         super(TAG);
-
     }
 
     @Override
-    protected void onHandleIntent(@Nullable Intent intent) {
+    protected void onHandleIntent(@Nullable final Intent intent) {
 
         if(!isNetworkAvailableAndConnected()){
             return;
@@ -45,7 +44,7 @@ public class OpenNetService extends IntentService {
         model.loadNews(new NewsModel.LoadNewsCallback() {
             @Override
             public void onLoad(List<NewsItem> items) {
-                action(items);
+                if(items != null) actionOnItems(items);
             }
         });
 
@@ -62,7 +61,7 @@ public class OpenNetService extends IntentService {
         return isNetworkConnected;
     }
 
-    private void action(List<NewsItem> items){
+    private void actionOnItems(List<NewsItem> items){
         if(items.size() == 0){
             return;
         }
