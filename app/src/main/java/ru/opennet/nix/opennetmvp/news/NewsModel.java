@@ -77,6 +77,7 @@ public class NewsModel {
                 m.printStackTrace();
             }catch (IOException e){
                 e.printStackTrace();
+                return null;
             }catch (XmlPullParserException x){
                 x.printStackTrace();
             }

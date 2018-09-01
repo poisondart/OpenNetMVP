@@ -105,7 +105,6 @@ public class NewsFragment extends MvpAppCompatFragment implements TopicsBottomAd
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                setUpdating(true);
                 mNewsPresenter.loadNews();
             }
         });
@@ -119,7 +118,6 @@ public class NewsFragment extends MvpAppCompatFragment implements TopicsBottomAd
         mOpenNetPreferences.setTopicTitle(title);
         mOpenNetPreferences.setTopicLink(url);
         mBottomSheetBehaviour.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        mNewsPresenter.showLoading(true);
         mNewsPresenter.setLink(url);
         mNewsPresenter.loadNews();
         mNewsRecyclerView.smoothScrollToPosition(0);
@@ -127,7 +125,8 @@ public class NewsFragment extends MvpAppCompatFragment implements TopicsBottomAd
 
     @Override
     public void onNewsItemClicked(String url, String title, String date) {
-        Intent intent = ArticleActivity.newIntent(getContext(), url, title, date, mOpenNetPreferences.getTopicTitle(getContext()));
+        Intent intent = ArticleActivity.newIntent(getContext(), url, title, date,
+                mOpenNetPreferences.getTopicTitle(getContext()));
         startActivity(intent);
     }
 
@@ -140,7 +139,11 @@ public class NewsFragment extends MvpAppCompatFragment implements TopicsBottomAd
     public void showNews(List<NewsItem> items) {
         mNewsAdapter.setNews(items);
         mNewsAdapter.notifyDataSetChanged();
-        setUpdating(false);
+    }
+
+    @Override
+    public void showError() {
+        Toast.makeText(getContext(), R.string.no_connection, Toast.LENGTH_SHORT).show();
     }
 
     private List<TopicItem> initTopics(){

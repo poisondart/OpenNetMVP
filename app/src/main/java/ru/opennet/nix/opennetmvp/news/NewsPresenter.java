@@ -16,21 +16,22 @@ public class NewsPresenter extends MvpPresenter<NewsView> {
     @Override
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
-        showLoading(true);
         loadNews();
     }
 
     public void loadNews(){
+        getViewState().setUpdating(true);
         mNewsModel.loadNews(new NewsModel.LoadNewsCallback() {
             @Override
             public void onLoad(List<NewsItem> items) {
-                getViewState().showNews(items);
+                if(items == null){
+                    getViewState().showError();
+                }else{
+                    getViewState().showNews(items);
+                }
+                getViewState().setUpdating(false);
             }
         });
-    }
-
-    public void showLoading(boolean state){
-        getViewState().setUpdating(state);
     }
 
     public void setLink(String link){

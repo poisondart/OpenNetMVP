@@ -56,4 +56,5 @@
     <string name="go_dev_key">dev_key</string>
     <string name="dev_email">novembernix@gmail.com</string>
     <string name="no_email_clients">У Вас не установлено никаких почтовых клиентов</string>
+    <string name="no_connection">Не удалось загрузить данные. Проверьте подключение к сети.</string>
 </resources>
