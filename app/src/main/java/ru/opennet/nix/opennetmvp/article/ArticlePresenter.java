@@ -59,10 +59,10 @@ public class ArticlePresenter extends MvpPresenter<ArticleView> {
         mArticleModel.loadCommentsLink(new ArticleModel.LoadCommentsLinkCallback() {
             @Override
             public void onLoad(String commentsLink) {
-                if(commentsLink.equals(ArticleModel.NO_CONNECTION)){
-                    getViewState().showError(R.string.no_connection);
-                }else if(commentsLink == null){
+                if(commentsLink == null){
                     getViewState().showError(R.string.cannot_load_comments);
+                }else if(commentsLink.equals(ArticleModel.NO_CONNECTION)){
+                    getViewState().showError(R.string.no_connection);
                 }else{
                     getViewState().startCommentsActivity(commentsLink);
                 }
