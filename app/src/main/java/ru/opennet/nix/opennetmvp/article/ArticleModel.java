@@ -149,9 +149,11 @@ public class ArticleModel {
                     ArticlePart articlePart = new ArticlePart(ArticlePart.SIMPLE_TEXT, e.html(), url);
                     articleParts.add(articlePart);
                 }else if(e.tagName().equals("iframe")){
-                    ArticlePart articlePart = new ArticlePart(ArticlePart.VIDEO_ITEM, e.attr("src"), url);
-                    articlePart.initVideoID();
-                    articleParts.add(articlePart);
+                    if (url.length() == 41){
+                        ArticlePart articlePart = new ArticlePart(ArticlePart.VIDEO_ITEM, e.attr("src"), url);
+                        articlePart.initVideoID();
+                        articleParts.add(articlePart);
+                    }
                 }else if(e.tagName().equals("img")){
                     ArticlePart articlePart = new ArticlePart(ArticlePart.IMAGE, e.attr("src"), url);
                     articleParts.add(articlePart);
