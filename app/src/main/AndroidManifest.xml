@@ -33,7 +33,9 @@
             android:theme="@style/Theme.Swipe.Back.NoActionBar"
             android:parentActivityName=".ArticleActivity">
         </activity>
-        <service android:name=".OpenNetService"/>
+        <service
+            android:name=".JobSchedulerService"
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
     </application>
 
 </manifest>

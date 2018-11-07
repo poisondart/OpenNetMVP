@@ -19,6 +19,7 @@ import ru.opennet.nix.opennetmvp.news.NewsModel;
 import ru.opennet.nix.opennetmvp.utils.Links;
 import ru.opennet.nix.opennetmvp.utils.OpenNetPreferences;
 
+@Deprecated
 public class OpenNetService extends IntentService {
 
     private static final String TAG = "OpenNetPollService";

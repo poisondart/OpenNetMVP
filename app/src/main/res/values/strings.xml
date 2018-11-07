@@ -32,6 +32,7 @@
     <string name="comment_desc">Она там поди уже сто лет в обед.</string>
     <!-- Error Messages -->
     <string name="cannot_play_video">Невозможно воспроизвести видео</string>
+    <string name="service_error">Возникла ошибка&#8230;</string>
     <string name="cannot_load_comments">Комментариев пока нет. Попробуйте позже</string>
     <!-- -->
     <!-- Settings-->
@@ -50,11 +51,14 @@
     <string name="app_title">Проект OpenNET</string>
     <string name="app_subtitle">Неофициальное приложение под Android</string>
     <string name="app_key">app_key</string>
-    <string name="app_version">0.7.7-alpha. Сборка от 02.09.2018</string>
+    <string name="app_version">0.7.8-alpha. Сборка от 07.11.2018</string>
     <string name="go_site">Посетить сайт opennet.ru</string>
     <string name="go_dev">Связаться с разработчиком</string>
     <string name="go_dev_key">dev_key</string>
     <string name="dev_email">novembernix@gmail.com</string>
     <string name="no_email_clients">У Вас не установлено никаких почтовых клиентов</string>
     <string name="no_connection">Не удалось загрузить данные. Проверьте подключение к сети.</string>
+    <!-- Notification Channel-->
+    <string name="channel_name">OpenNet notification channel</string>
+    <string name="channel_description">OpenNet notification channel is created for fetching last news from website</string>
 </resources>

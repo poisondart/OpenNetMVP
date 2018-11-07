@@ -5,10 +5,10 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "ru.opennet.nix.opennetmvp"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 27
         versionCode 1
-        versionName "0.7.7-alpha"
+        versionName "0.7.8-alpha"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

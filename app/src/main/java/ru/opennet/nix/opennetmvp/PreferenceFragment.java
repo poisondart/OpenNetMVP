@@ -1,13 +1,22 @@
 package ru.opennet.nix.opennetmvp;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
+import android.text.format.DateUtils;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -15,8 +24,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import static ru.opennet.nix.opennetmvp.JobSchedulerService.CHANNEL_ID;
+
 public class PreferenceFragment extends PreferenceFragmentCompat implements
-        Preference.OnPreferenceClickListener{
+        Preference.OnPreferenceClickListener {
     private Preference mAboutPreference, mLicencePreference, mDevPreference, mNotificationsPreference;
     private String mMessage;
 
@@ -42,9 +53,10 @@ public class PreferenceFragment extends PreferenceFragmentCompat implements
         mDevPreference.setOnPreferenceClickListener(this);
         mNotificationsPreference.setOnPreferenceClickListener(this);
     }
+
     @Override
     public boolean onPreferenceClick(Preference preference) {
-        switch (preference.getKey()){
+        switch (preference.getKey()) {
             case "app_key":
                 Toast.makeText(getActivity(), R.string.app_version, Toast.LENGTH_LONG).show();
                 break;
@@ -61,14 +73,51 @@ public class PreferenceFragment extends PreferenceFragmentCompat implements
                 showLicenses();
                 break;
             case "notifications_key":
-                boolean shouldStartAlarm = !OpenNetService.isServiceAlarmOn(getActivity());
-                OpenNetService.setServiceAlarm(getActivity(), shouldStartAlarm);
+                if (((CheckBoxPreference) preference).isChecked()) {
+                    createNotificationChannel();
+                    if (!scheduleService()) {
+                        ((CheckBoxPreference) preference).setChecked(false);
+                        Toast.makeText(getActivity(), R.string.service_error, Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    stopAllServices();
+                }
+
                 break;
         }
         return true;
     }
-    private void initLicenseMessage(){
-        try{
+
+    private boolean scheduleService() {
+        ComponentName componentName = new ComponentName(getContext(), JobSchedulerService.class);
+        JobInfo jobInfo = new JobInfo.Builder(JobSchedulerService.JOB_ID, componentName)
+                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_NONE)
+                .setRequiresDeviceIdle(false)
+                .setPeriodic(DateUtils.HOUR_IN_MILLIS)
+                .build();
+        JobScheduler jobScheduler = (JobScheduler) getContext().getSystemService(Context.JOB_SCHEDULER_SERVICE);
+        int result = jobScheduler.schedule(jobInfo);
+        return result == JobScheduler.RESULT_SUCCESS;
+    }
+
+    private void stopAllServices() {
+        JobScheduler jobScheduler = (JobScheduler) getContext().getSystemService(Context.JOB_SCHEDULER_SERVICE);
+        jobScheduler.cancelAll();
+    }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(JobSchedulerService.CHANNEL_ID,
+                    getString(R.string.channel_name),
+                    NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setDescription(getString(R.string.channel_description));
+            NotificationManager notificationManager = getContext().getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    private void initLicenseMessage() {
+        try {
             AssetManager assetManager = getActivity().getAssets();
             InputStream inputStream = assetManager.open("license.txt");
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
@@ -76,21 +125,22 @@ public class PreferenceFragment extends PreferenceFragmentCompat implements
             String receiveString;
             StringBuilder stringBuilder = new StringBuilder();
 
-            while ( (receiveString = bufferedReader.readLine()) != null ) {
-                if(receiveString.equals("")){
+            while ((receiveString = bufferedReader.readLine()) != null) {
+                if (receiveString.equals("")) {
                     stringBuilder.append(System.getProperty("line.separator"));
-                }else{
+                } else {
                     stringBuilder.append(receiveString);
                 }
             }
             inputStream.close();
             mMessage = stringBuilder.toString();
 
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    private void showLicenses(){
+
+    private void showLicenses() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.licence)
                 .setMessage(mMessage)
